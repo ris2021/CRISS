@@ -1,0 +1,32 @@
+<ASSEMBLER_INFO>
+ <VERSION>2.1.42</VERSION>
+ <DEVICE>ATtiny13</DEVICE>
+ <WORKING_DIR>C:\D\vga\at13</WORKING_DIR>
+ <INCLUDE_PATH>
+  <DIR>C:\Program Files (x86)\Atmel\AVR Tools\AvrAssembler2\Appnotes</DIR>
+ </INCLUDE_PATH>
+ <SOURCE_FILE>C:\D\vga\at13\at13.asm</SOURCE_FILE>
+ <INCLUDED_FILES>
+  <FILE>C:\Program Files (x86)\Atmel\AVR Tools\AvrAssembler2\Appnotes\tn13def.inc</FILE>
+  <FILE>C:\D\vga\at13\../macro.inc</FILE>
+ </INCLUDED_FILES>
+ <OBJECT_FILES>
+  <FILE>C:\D\vga\at13\at13.obj</FILE>
+ </OBJECT_FILES>
+ <HEX_FILES>
+  <FILE>C:\D\vga\at13\at13.hex</FILE>
+ </HEX_FILES>
+ <OUTPUT_FILES>
+  <FILE>C:\D\vga\at13\at13.map</FILE>
+ </OUTPUT_FILES>
+ <LABELS>
+  <RESET><FILE>C:\D\vga\at13\at13.asm</FILE><LINE>80</LINE></RESET>
+  <MLOOP><FILE>C:\D\vga\at13\at13.asm</FILE><LINE>106</LINE></MLOOP>
+  <DATALINE><FILE>C:\D\vga\at13\at13.asm</FILE><LINE>160</LINE></DATALINE>
+  <VSONLINE><FILE>C:\D\vga\at13\at13.asm</FILE><LINE>141</LINE></VSONLINE>
+  <VSOFFLINE><FILE>C:\D\vga\at13\at13.asm</FILE><LINE>151</LINE></VSOFFLINE>
+  <ELINE><FILE>C:\D\vga\at13\at13.asm</FILE><LINE>129</LINE></ELINE>
+  <ELINE4><FILE>C:\D\vga\at13\at13.asm</FILE><LINE>134</LINE></ELINE4>
+  <HS><FILE>C:\D\vga\at13\at13.asm</FILE><LINE>174</LINE></HS>
+ </LABELS>
+</ASSEMBLER_INFO>
