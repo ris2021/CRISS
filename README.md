@@ -2,7 +2,7 @@
 
 CRISS CP/M: the modern single-board 8-bit full-featured personal computer! Amazing functionality for the DIY device: it is not a toy, it is REAL Computer, the SAFEST computer in the world and the sophisticated control platform for your projects!
 
-Features:
+<h2>Features:</h2>
 
 <ul>
 <li> OS: CP/M 2.2 = programming languages, text processors, games, business software, etc.
