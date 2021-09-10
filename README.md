@@ -1,3 +1,5 @@
+<h1 color=red>Migration of the code to Github is under progress and will take a while, please wait for the completion!</h1>
+
 <h1>CRISS CP/M Project</h1>
 
 CRISS CP/M: the modern single-board 8-bit full-featured personal computer! Amazing functionality for the DIY device: it is not a toy, it is REAL Computer, the SAFEST computer in the world and the sophisticated control platform for your projects!
