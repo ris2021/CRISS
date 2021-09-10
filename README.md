@@ -1,4 +1,4 @@
-<h1 color=red>Migration of the code to Github is under progress and will take a while, please wait for the completion!</h1>
+<h1 color=red>Migration to Github is under progress and will take a while, please wait for the completion!</h1>
 
 <h1>CRISS CP/M Project</h1>
 
