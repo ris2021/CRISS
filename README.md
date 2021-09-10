@@ -21,3 +21,16 @@ CRISS CP/M: the modern single-board 8-bit full-featured personal computer! Amazi
 8-bit Microchip AVR MCUs based, DIP components only (!), 100% open project, programmers and technical support website. Pocket-size box 140x110x35 mm, AC/DC module on the board. Just plug it to the power line, plugin standard VGA monitor or TV and PS/2 keyboard and start to enjoy it!
 
 Please find more info at www.criss.fun, criss.radio.ru
+
+<h2>Project structure</h2>
+
+CRISS CP/M computer contains 4 AVR MCU: two for VGA driver, 1 as peripherial controller and 1 as main CPU. Firmware for them consists from bootloader that must be pre-programming before soldering and the firmware.
+
+<table border=1>
+  <tr><th>Role</th><th>Name</th><th>Type</th><th>Bootloader folder</th><th>Firmware folder</th><th>Fuses</th><th>Comments</th></tr>
+  <tr><td>VGA cobtroller - sync generation</td><td>VGA-AT13</td><td>ATTINY13A</td><td>-</td><td>VGA-AT13</td><td></td><td></td></tr>
+  <tr><td>VGA cobtroller - chars generator</td><td>VGA-M328</td><td>ATMEGA328P</td><td>VGA-M328-BL</td><td>VGA-M328-FW</td><td></td><td></td></tr>
+  <tr><td>Pripherial controller</td><td>CPD</td><td>ATMEGA328P</td><td>CPD-BL</td><td>CPD-FW</td><td></td><td></td></tr>
+  <tr><td>Main CPU</td><td>CPU</td><td>ATMEGA1284P</td><td>CPU-BL</td><td>CPD-FW</td><td></td><td></td></tr>
+</table>  
+
