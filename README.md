@@ -2,7 +2,7 @@
 
 <h1>CRISS CP/M Project</h1>
 
-The first DIY full-featured computer supporting VGA, Mouse, Pronter, Ethernet, RTC, GPIO with CP/M OS and Z80 compatible instuction set! No kits and pre-assebled boards, DIP components only, clear design and well known Atmel AVR ATMEGA and ATTINY MCU only!
+The first DIY full-featured computer supporting VGA, Mouse, Pronter, Ethernet, RTC, GPIO with CP/M OS and Z80 compatible instuction set! No kits and pre-assebled boards, DIP components only, clear design and standard Atmel AVR ATMEGA and ATTINY MCUs only!
 
 <img src=http://criss.fun/criss/15002.png>
 
