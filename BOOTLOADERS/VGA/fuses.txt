@@ -1,0 +1,9 @@
+Ext 0xFC
+High 0xDE
+Low 0xE0
+
+Brown-out 4.3v
+SPI enabled
+Boot flash 256 words
+Boot reset enabled
+Ext clock 6CK+65ms

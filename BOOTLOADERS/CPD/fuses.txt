@@ -1,0 +1,11 @@
+Ext = 0xfc
+High = 0xdc
+Low = 0xbf
+
+Brown-out: 4.3v
+SPI enabled
+Boot flash 512 words
+Boot reset enabled
+Clock output on B0
+Ext osc. 8-, 16K, 64ms
+

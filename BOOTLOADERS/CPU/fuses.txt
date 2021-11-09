@@ -1,0 +1,10 @@
+Ext = 0xFC
+High = 0xD6
+Low = 0xE0
+
+Brown-out at 4,3v
+SPI Enabled
+Preserve EEPROM from Chip Erase
+512 words bootloader
+Boot Reset Enabled
+Ext Clock 65ms
