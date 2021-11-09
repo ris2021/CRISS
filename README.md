@@ -39,10 +39,10 @@ It is 100% open project and you can use it as you want without any restrictions,
 CRISS CP/M computer contains 4 AVR MCU: 2 (ATTINY13 + ATMEGA328P) are for generating VGA output, 1 (ATMEGA328P) is used as a peripheral controller and 1 (ATMEGA1284P) as main CPU. All MEGA MCUs have bootloaders that should be pre-programmed before installation. Main firmware are uploading via the internal socket using special tool program for that.
 
 <table border=1>
-  <tr><th>Role</th><th>Name</th><th>Type</th><th>Bootloader folder</th><th>Firmware folder</th><th>Fuses</th><th>Comments</th></tr>
-  <tr><td>VGA controller - sync generation</td><td>VGA-AT13</td><td>ATTINY13A</td><td>-</td><td>VGA-AT13</td><td></td><td></td></tr>
-  <tr><td>VGA controller - chars generator</td><td>VGA-M328P</td><td>ATMEGA328P</td><td>BOOTLOADERS/VGA</td><td>VGA-M328-FW</td><td></td><td></td></tr>
-  <tr><td>Pripheral controller</td><td>CPD</td><td>ATMEGA328P</td><td>BOOTLOADERS/CPD</td><td>CPD-FW</td><td></td><td></td></tr>
-  <tr><td>Main CPU</td><td>CPU</td><td>ATMEGA1284P</td><td>BOOTLOADERS/CPU</td><td>CPD-FW</td><td></td><td></td></tr>
+  <tr><th>Role</th><th>Name</th><th>Type</th><th>Bootloader folder</th><th>Firmware folder</th><th>Comments</th></tr>
+  <tr><td>VGA controller - sync generation</td><td>VGA-AT13</td><td>ATTINY13A</td><td>-</td><td>VGA-AT13</td><td></td></tr>
+  <tr><td>VGA controller - chars generator</td><td>VGA-M328P</td><td>ATMEGA328P</td><td>BOOTLOADERS/VGA</td><td>VGA-M328-FW</td><td></td></tr>
+  <tr><td>Pripheral controller</td><td>CPD</td><td>ATMEGA328P</td><td>BOOTLOADERS/CPD</td><td>CPD-FW</td><td></td></tr>
+  <tr><td>Main CPU</td><td>CPU</td><td>ATMEGA1284P</td><td>BOOTLOADERS/CPU</td><td>CPD-FW</td><td></td></tr>
 </table>  
 
