@@ -22,7 +22,11 @@ CRISS CP/M: the modern single-board 8-bit full-featured personal computer! Amazi
 
 8-bit Microchip AVR MCUs based, DIP components only (!), 100% open project, programmers and technical support website. Pocket-size box 140x110x35 mm, AC/DC module on the board. Just plug it to the power line, plugin standard VGA monitor or TV and PS/2 keyboard and start to enjoy it!
 
-Please find more info at www.criss.fun, criss.radio.ru
+Please find more info at:
+<ul>
+<li> http://www.criss.fun - programmer's and user's manuals and technical reference in English
+<li> http://criss.radio.ru - сайт технической поддержки на русском языке
+<li> https://hackaday.io/project/181038 - project page at HACKADAY.IO, don't forget to like project!
 
 <h2>Project structure</h2>
 
