@@ -1,0 +1,132 @@
+.EQU	cpd_base	= 0
+
+.EQU	cpd_vstat	= cpd_base+0x00
+.EQU	cpd_vcurh	= cpd_base+0x01
+.EQU	cpd_vcurl	= cpd_base+0x02
+
+.EQU	cpd_kmodk	= cpd_base+0x03
+
+	.EQU	CTRL	= 0
+	.EQU	SHIFT	= 1
+	.EQU	SCRLOCK = 2
+	.EQU	CAPSLOCK= 3
+	.EQU	ALT	= 4
+
+
+.EQU	cpd_kactk	= cpd_base+0x04
+.EQU	cpd_kchar	= cpd_base+0x05
+
+.EQU	cpd_mpcmd	= cpd_base+0x06
+
+.EQU	cpd_twcmd	= cpd_base+0x07
+.EQU	cpd_twdti	= cpd_base+0x08
+
+.EQU	cpd_micex	= cpd_base+0x09	; mouse x
+.EQU	cpd_micey	= cpd_base+0x0a	; mouse y
+
+.EQU	cpd_sysrq	= cpd_base+0x0b
+.EQU	cpd_sysaa	= cpd_base+0x0c
+.EQU	cpd_sysvv	= cpd_base+0x0d
+
+.EQU	cpd_ctcvv	= cpd_base+0x0e	; CTC max count value
+
+.EQU	cpd_comtc	= cpd_base+0x0f	; COM-port Tx data counter (set =1 to transmit comtx data)
+
+; res
+
+.EQU	cpd_mpbuf	= cpd_base+0x10	; 16 bytes
+
+.EQU	cpd_irqfl	= cpd_base+0x20
+;	.EQU	IRQ_COM_RX	= 7	; COM-port char received
+;	.EQU	IRQ_COM_TX	= 6     ; COM-port clear to send
+;	.EQU	IRQ_MOUSE	= 5     ; Mouse/joistick pointer changed
+;	.EQU	IRQ_____	= 4     ; 
+;	.EQU	IRQ_MUSIC	= 3	; MUSIC synthesator - end of melody
+;	.EQU	IRQ_CTC		= 2     ; Timer == 0
+;	.EQU	IRQ_GPIO	= 1     ; GPIO ????
+;	.EQU	IRQ_KBD		= 0 	; Keyboard key pressed
+
+.EQU	cpd_comst	= cpd_base+0x21
+.EQU	cpd_comtx	= cpd_base+0x22
+.EQU	cpd_comrx	= cpd_base+0x23
+
+; --------------- SYSPORT COMMANDS ---------------------------------------
+
+.EQU	cpd_sys_read_request = 0x81
+.EQU	cpd_sys_write_request = 0x82
+
+
+; --------------- PERIPHERIAL ACCESS -------------------------------------
+
+.EQU	rs232_status	= 0xC0
+.EQU	rs232_data	= 0xC6
+.EQU	rs232_baud	= 0xC4
+
+.EQU	cpd_gpior0	= 0x3E	; IRQ system flag register - do not use!
+.EQU	cpd_gpior1	= 0x4A  ; IRQ mask register 
+;	.EQU	IRQ_COM_RX	= 7	; COM-port char received
+;	.EQU	IRQ_COM_TX	= 6     ; COM-port clear to send
+;	.EQU	IRQ_MOUSE	= 5     ; Mouse/joistick pointer changed
+;	.EQU	IRQ_____	= 4     ; 
+;	.EQU	IRQ_MUSIC	= 3	; MUSIC synthesator - end of melody
+;	.EQU	IRQ_CTC		= 2     ; Timer == 0
+;	.EQU	IRQ_GPIO	= 1     ; GPIO ????
+;	.EQU	IRQ_KBD		= 0 	; Keyboard key pressed
+
+.EQU	cpd_gpior2	= 0x4B
+
+.EQU	fe_user_base	= 128
+.EQU	fe_res_base	= 96
+.EQU	fe_rtc_base	= 80
+.EQU	fe_lan_base	= 48
+.EQU	fe_can_base	= 16
+.EQU	fe_eeprom_base	= 2
+.EQU	fe_sd_base	= 1
+.EQU	fe_spi_base	= 0
+
+; --------------- MACROS -------------------------------------------------
+
+.MACRO	nportin
+	ldi	temp, @0
+	call	CPDPORTIN
+.ENDM
+
+.MACRO	nportout
+	sts	CDATA+1, @1
+	ldi	temp, @0
+	call	CPDPORTOUT
+.ENDM
+
+.MACRO	nportout_t
+	ldi	temp, @1
+	sts	CDATA+1, temp
+	ldi	temp, @0
+	call	CPDPORTOUT
+.ENDM
+
+
+; waiting sysport clearance
+.MACRO	sysport_ready
+_spi_l0:
+	nportin cpd_sysrq
+	cpi	temp, 0
+	brne	_spi_l0		; wait clearance
+.ENDM
+
+; read from cpd sysport, @0 = sysport address/code
+.MACRO	sysportin
+	sysport_ready		; wait ready state
+	nportout cpd_sysaa, @0	; out address 
+	nportout cpd_sysrq, cpd_sys_read_request	; read request
+	sysport_ready		; wait ready state
+	nportin cpd_sysvv	; read data to temp
+.ENDM
+
+; write data to cpd sysport, @0 = sysport address/code, @1 = value
+.MACRO	sysportout
+	sysport_ready		; wait ready state
+	nportout cpd_sysaa, @0	; out address 
+	nportout cpd_sysvv, @1	; out data 
+	nportout cpd_sysrq, cpd_sys_write_request	; send write request
+.ENDM
+

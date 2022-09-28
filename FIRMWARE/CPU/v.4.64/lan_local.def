@@ -1,0 +1,19 @@
+; SPI timing setting
+;.EQU	LAN_SPI_SETTINGS = SPI_FCK_DIV_4
+.EQU	LAN_SPI_SETTINGS = SPI_FCK_DIV_2
+
+; LAN LPM/ELPM command
+.MACRO	celpm
+	elpm	@0, @1
+.ENDM
+
+; LAN 10 us delay
+.MACRO	_LAN_WAIT_10us
+	push	temp
+	delay3	210
+	pop	temp
+.ENDM
+
+.MACRO	DELAY_10us
+	rcall	LAN_WAIT_10us
+.ENDM	

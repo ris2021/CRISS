@@ -1,0 +1,433 @@
+; common
+.EQU	LAN_EIE		= 0x1B
+.EQU	LAN_EIR		= 0x1C
+.EQU	LAN_ESTAT	= 0x1D
+.EQU	LAN_ECON2	= 0x1E
+.EQU	LAN_ECON1	= 0x1F
+
+; bank 0
+.EQU	LAN_ERDPT	= 0x00
+.EQU	LAN_ERDPTL	= 0x00
+.EQU	LAN_ERDPTH	= 0x01
+
+.EQU	LAN_EWRPT	= 0x02
+.EQU	LAN_EWRPTL	= 0x02
+.EQU	LAN_EWRPTH	= 0x03
+
+.EQU	LAN_ETXST	= 0x04
+.EQU	LAN_ETXSTL	= 0x04
+.EQU	LAN_ETXSTH	= 0x05
+
+.EQU	LAN_ETXND	= 0x06
+.EQU	LAN_ETXNDL	= 0x06
+.EQU	LAN_ETXNDH	= 0x07
+
+.EQU	LAN_ERXST	= 0x08
+.EQU	LAN_ERXSTL	= 0x08
+.EQU	LAN_ERXSTH	= 0x09
+
+.EQU	LAN_ERXND	= 0x0a
+.EQU	LAN_ERXNDL	= 0x0a
+.EQU	LAN_ERXNDH	= 0x0b
+
+.EQU	LAN_ERXRDPT	= 0x0c
+.EQU	LAN_ERXRDPTL	= 0x0c
+.EQU	LAN_ERXRDPTH	= 0x0d
+
+; bank 1
+.EQU	LAN_ERXFCON	= 0x18
+.EQU	LAN_EPKTCNT	= 0x19
+
+
+; bank 2
+.EQU	LAN_MACON1	= 0x00
+.EQU	LAN_MACON3	= 0x02
+.EQU	LAN_MACON4	= 0x03
+.EQU	LAN_MABBIPG	= 0x04
+
+.EQU	LAN_MAIPG	= 0x06
+.EQU	LAN_MAIPGL	= 0x06
+.EQU	LAN_MAIPGH	= 0x07
+
+.EQU	LAN_MAMXFL	= 0x0a
+.EQU	LAN_MAMXFLL	= 0x0a
+.EQU	LAN_MAMXFLH	= 0x0b
+
+.EQU	LAN_MICMD	= 0x12
+.EQU	LAN_MIREGADR	= 0x14
+
+.EQU	LAN_MIWR	= 0x16
+.EQU	LAN_MIWRL	= 0x16
+.EQU	LAN_MIWRH	= 0x17
+
+.EQU	LAN_MIRD	= 0x18
+.EQU	LAN_MIRDL	= 0x18
+.EQU	LAN_MIRDH	= 0x19
+
+; bank 3
+.EQU	LAN_MAADR5	= 0x00
+.EQU	LAN_MAADR6	= 0x01
+.EQU	LAN_MAADR3	= 0x02
+.EQU	LAN_MAADR4	= 0x03
+.EQU	LAN_MAADR1	= 0x04
+.EQU	LAN_MAADR2	= 0x05
+
+.EQU	LAN_EREVID	= 0x12
+
+; PHY regs
+.EQU	LAN_PHCON1	= 0x00
+.EQU	LAN_PHSTAT1	= 0x01
+.EQU	LAN_PHID1	= 0x02
+.EQU	LAN_PHID2	= 0x03
+.EQU	LAN_PHCON2	= 0x10
+.EQU	LAN_PHSTAT2	= 0x11
+.EQU	LAN_PHIE	= 0x12
+.EQU	LAN_PHIR	= 0x13
+.EQU	LAN_PHLCON	= 0x14
+
+; control comands
+.EQU	LAN_REG_RCR	= 0x00 << 5
+.EQU	LAN_REG_READ	= LAN_REG_RCR	; alias
+.EQU	LAN_REG_RBM	= 0x01 << 5
+.EQU	LAN_REG_WCR	= 0x02 << 5
+.EQU	LAN_REG_WRITE	= LAN_REG_WCR	; alias
+.EQU	LAN_REG_WBM	= 0x03 << 5	
+.EQU	LAN_REG_BFS	= 0x04 << 5
+.EQU	LAN_REG_BFC	= 0x05 << 5
+.EQU	LAN_REG_SRC	= 0x07 << 5
+
+; bank settings
+.EQU	LAN_BANK0	= 0x00
+.EQU	LAN_BANK1	= 0x01
+.EQU	LAN_BANK2	= 0x02
+.EQU	LAN_BANK3	= 0x03
+
+; RW buffer settings
+.EQU	LAN_M_BUFSIZE	= 0x2000
+.EQU	LAN_M_RXSIZE	= 0x1a00
+.EQU	LAN_M_BUFEND	= LAN_M_BUFSIZE-1
+.EQU	LAN_M_MAXFRAME	= 1500
+.EQU	LAN_M_RXSTART	= 0x0000
+.EQU	LAN_M_RXEND	= LAN_M_RXSIZE-1
+.EQU	LAN_M_TXSTART	= LAN_M_RXSIZE
+.EQU	LAN_M_TXEND	= LAN_M_BUFSIZE-1
+
+
+;LAN COMMANDS
+.EQU	LAN_FUNC_INIT         = 0
+.EQU	LAN_FUNC_INIT_CUSTOM  = 1
+.EQU	LAN_FUNC_COPY_RAM_BUF = 2
+.EQU	LAN_FUNC_COPY_BUF_RAM = 3	; copy FULL buffer
+.EQU	LAN_FUNC_GET_ETH_REG  = 4	; copy FULL buffer
+.EQU	LAN_FUNC_GET_MX_REG   = 5
+.EQU	LAN_FUNC_SEND         = 6
+.EQU	LAN_FUNC_RECEIVE      = 7
+.EQU	LAN_FUNC_GET_EPKTCNT  = 8
+.EQU	LAN_FUNC_UPDATE_REG   = 9
+.EQU	LAN_FUNC_GET_PHY_REG  = 10
+.EQU	LAN_FUNC_LAN_IP_CRC   = 11
+.EQU	LAN_FUNC_BUILD_IP     = 12
+.EQU	LAN_FUNC_BUILD_UDP    = 13
+.EQU	LAN_FUNC_ARP_RESP     = 14
+.EQU	LAN_FUNC_BUILD_ETH    = 15
+.EQU	LAN_FUNC_CHECK_FRAME  = 16
+.EQU	LAN_FUNC_GET_ESTAT    = 17
+.EQU	LAN_FUNC_PROCESS      = 18
+.EQU	LAN_FUNC_GET_UDP_DATA = 19
+.EQU	LAN_FUNC_BUILD_ARP_REQ= 20
+.EQU	LAN_FUNC_SEND_UDP     = 21
+.EQU	LAN_FUNC_PING_REQ     = 22	;!!! replaced from previous version !!!
+.EQU	LAN_FUNC_PING_RESP    = 23	
+;SYSTEM CALLS
+.EQU	LAN_FUNC_SEND_SRV     = 119
+.EQU	LAN_FUNC_SEND_PR      = 120
+.EQU	LAN_FUNC_SEND_PRN     = 121	; remote PRN server
+.EQU	LAN_FUNC_SEND_RSD     = 122	; remote SD server
+;.EQU	LAN_FUNC_ = 
+;.EQU	LAN_FUNC_ = 
+
+.EQU	LAN_PROTOCOL_ETH  = 8
+.EQU	LAN_PROTOCOL_IPH  = 8
+.EQU	LAN_PROTOCOL_IPL  = 0
+.EQU	LAN_PROTOCOL_UDP  = 17
+.EQU	LAN_PROTOCOL_ICMP  = 1
+
+.EQU	LAN_PROT_ICMP_ECHO  = 0
+.EQU	LAN_PROT_ICMP_PING  = 8
+
+.EQU	LAN_INPUT_ARP_IN    = 0x81	; ARP
+.EQU	LAN_INPUT_ARP_RESP  = 0x82	; ARP
+.EQU	LAN_INPUT_UDP_MAIN  = 0x83	; UDP to main
+.EQU	LAN_INPUT_UDP_PR    = 0x84	; UDP to PRSRV
+.EQU	LAN_INPUT_UDP_SRV   = 0x85	; UDP to SRV
+
+.EQU	LAN_INPUT_PING_IN   = 0x8a	; Ping request received
+.EQU	LAN_INPUT_PING_RESP = 0x8b	; Ping request echo received
+
+
+.MACRO	LAN_ETH_REG_READ
+        SPI_SELECT
+	iSPI	LAN_REG_READ | @0
+	iSPI	0xff		; read data
+        SPI_DESELECT
+.ENDM
+
+; reg number from stacl
+.MACRO	LAN_ETH_REG_READ_S
+        SPI_SELECT
+        pop	temp
+        ori	temp, LAN_REG_READ
+        call	DOSPI
+	iSPI	0xff		; read data
+        SPI_DESELECT
+.ENDM
+
+.MACRO	LAN_Mx_REG_READ
+        SPI_SELECT
+	iSPI	LAN_REG_READ | @0
+	iSPI	0xff		; dummy byte skip
+	iSPI	0xff
+        SPI_DESELECT
+.ENDM
+
+.MACRO	LAN_Mx_REG_READ_S
+        SPI_SELECT
+        pop	temp
+        ori	temp, LAN_REG_READ
+        call	DOSPI
+	iSPI	0xff		; dummy byte skip
+	iSPI	0xff
+        SPI_DESELECT
+.ENDM
+
+; write @1 to register @0
+.MACRO	LAN_CREG_WRITE_C
+        SPI_SELECT
+	iSPI	(@2) | (@0)
+	iSPI	@1
+        SPI_DESELECT
+.ENDM
+
+; write stack to register @0, oper @1
+.MACRO	LAN_CREG_WRITE_C_S
+        SPI_SELECT
+	iSPI	(@1) | (@0)
+	pop	temp
+	call	DOSPI
+	SPI_DESELECT
+.ENDM
+
+
+; write @1 to register @0
+.MACRO	LAN_CREG_WRITE
+        SPI_SELECT
+	iSPI	LAN_REG_WRITE | (@0)
+	iSPI	(@1)
+        SPI_DESELECT
+.ENDM
+
+; write reg @1 to register @0
+.MACRO	LAN_CREG_WRITE_R
+        SPI_SELECT
+	iSPI	LAN_REG_WRITE | (@0)
+	mov	temp, @1
+	call	DOSPI
+;	iSPI	(@1)
+        SPI_DESELECT
+.ENDM
+
+; write word @1 to register @0
+.MACRO	LAN_CREG_WRITE_LH
+        LAN_CREG_WRITE @0L, low(@1)
+        LAN_CREG_WRITE @0H, high(@1)
+.ENDM
+
+; write req @1 to register @0
+.MACRO	LAN_CREG_WRITE_LH_R
+        LAN_CREG_WRITE_R @0L, @1L
+        LAN_CREG_WRITE_R @0H, @1H
+.ENDM
+
+; write data from stack to register @0
+.MACRO	LAN_CREG_WRITE_S
+        SPI_SELECT
+	iSPI	LAN_REG_WRITE | (@0)
+	pop	temp
+	call	DOSPI
+        SPI_DESELECT
+.ENDM
+
+
+; write @1 to PHY register @0
+.MACRO	LAN_WRITE_PHY
+	LAN_CREG_WRITE LAN_MIREGADR, @0
+	LAN_CREG_WRITE_LH LAN_MIWR, @1
+	call	LAN_WAIT_10us
+.ENDM
+
+
+;.EQU	CMDLAN_INIT_DEFAULT 	= 0
+;.EQU	CMDLAN_INIT_CUSTOM 	= 1
+;.EQU	CMDLAN_FILL_BUFER 	= 2
+;.EQU	CMDLAN_SEND_BUFER 	= 3
+;.EQU	CMDLAN_ETH_READ 	= 4
+;.EQU	CMDLAN_MX_READ 		= 5
+;.EQU	CMDLAN_SEND_FRAME 	= 6
+;.EQU	CMDLAN_GET_FRAME 	= 7
+;.EQU	CMDLAN_PCOUNT 		= 8
+;.EQU	CMDLAN_ETH_SET 		= 9
+;.EQU	CMDLAN_PHY_READ 	= 10
+;.EQU	CMDLAN_CRC 		= 11
+;.EQU	CMDLAN_BUILD_IP		= 12
+;.EQU	CMDLAN_BUILD_UDP	= 13
+;.EQU	CMDLAN_BUILD_ARP_RESP	= 14
+;.EQU	CMDLAN_BUILD_ETH	= 15
+;.EQU	CMDLAN_FRAME_TYPE	= 16
+;.EQU	CMDLAN_STAT		= 17
+;.EQU	CMDLAN_PROCESS		= 18
+
+;.EQU	CMDLAN_SEND_UDP		= 21
+;.EQU	CMDLAN_REMOVE_UDP_HEADER= 22
+
+; internal call only!
+;.EQU	CMDLAN_BUILD_UDP_LEAN	= 101
+;.EQU	CMDLAN_RAM_TO_ZZ_UDP	= 102
+;.EQU	CMDLAN_UDP_SET_L	= 103	
+;.EQU	CMDLAN_ZZ_TO_RAM_UDP	= 104
+
+;.EQU	CMDLAN_SEND_SERVER	= 119
+;.EQU	CMDLAN_SEND_PR		= 120
+
+
+.MACRO	EXEC_LAN_CMD
+	ldi	temp, @0
+	call	LAN_CMD
+.ENDM
+
+.MACRO	_EXEC_LAN_CMD
+	ldi	temp, @0
+	rcall	_LAN_CMD
+.ENDM
+
+; write buffer starting Z Y bytes length
+.MACRO	LAN_TBUF_WRITE
+        SPI_SELECT
+	iSPI	LAN_REG_WBM | 0x1a	; WBM command
+	iSPI	0		; per packet control byte, bit 0 = 0 == use MACON 3 settings
+ltbw_l3:
+	cpi	@1H, 0
+	brne	ltbw_l1
+	cpi	@1L, 0
+	breq	ltbw_l2
+ltbw_l1:
+	ld	temp, @0+
+	call	DOSPI
+	sbiw	@1, 1
+	rjmp	ltbw_l3
+ltbw_l2:
+        SPI_DESELECT
+.ENDM
+
+
+; read current paket to (@0), report data length to @1
+.MACRO	LAN_TBUF_READ
+        SPI_SELECT
+	iSPI	LAN_REG_RBM | 0x1a	; RBM command
+
+	call 	DOSPI
+	sts	LAN_OP_RXDPT, temp 	; was LAN_RXDPT
+	call 	DOSPI
+	sts	LAN_OP_RXDPT+1, temp
+
+	call 	DOSPI
+	mov	@1L, temp
+	call 	DOSPI
+	mov	@1H, temp		; received packet length
+	cpiw	@1, 4			; is there data?
+	brsh	ltbw_l5
+	push	zero
+	push	zero			; zero length to return
+	rjmp	ltbw_l2			; empty packet
+
+ltbw_l5:
+	sbiw	@1, 4			; remove crc from reading
+
+	;boundary check	
+	lds	temp, LAN_OP_BUF_SIZE
+	cp	@1L, temp
+	lds	temp, LAN_OP_BUF_SIZE+1
+	cpc	@1H, temp
+	brlo	ltbw_l4
+
+	ldw	@1, LAN_OP_BUF_SIZE	; limit to BUF size
+	
+ltbw_l4:
+	pushw	@1			; store data length to return
+
+	call 	DOSPI
+	sts	LAN_RXSTATUS, temp 
+	push	temp			; store lo byte for check
+	call 	DOSPI
+	sts	LAN_RXSTATUS+1, temp 
+
+	pop	temp			; status low byte
+	sbrs	temp, 7			; check success
+	rjmp	ltbw_l2			; exit on error
+
+ltbw_l3:				; read buffer
+	cpi	@1H, 0
+	brne	ltbw_l1
+	cpi	@1L, 0
+	breq	ltbw_l2
+ltbw_l1:
+	ldi	temp, 0xff
+	call	DOSPI
+	st	@0+, temp 
+	sbiw	@1, 1
+	rjmp	ltbw_l3
+ltbw_l2:
+	popw	@1			; restore length
+        SPI_DESELECT
+;	lds	temp, LAN_RXSTATUS 	; status for return
+.ENDM
+
+
+; copy word normal to be
+.MACRO	LAN_COPY_PORT
+	lds	temp, @0
+	sts	@1+1, temp
+	lds	temp, @0+1
+	sts	@1, temp
+.ENDM
+
+.MACRO	stswbe
+	sts	@0, @1H
+	sts	@0+1, @1L
+.ENDM
+
+
+; copy 6 bytes from (@1) to (@0)
+.MACRO	COPY_MAC
+	ldiw	Z, @1
+	ldiw	X, @0
+	rcall	_LAN_COPY_MAC
+.ENDM
+
+; copy 4 bytes from (@1) to (@0)
+.MACRO	COPY_IP
+	ldiw	Z, @1
+	ldiw	X, @0
+	rcall	_LAN_COPY_IP
+.ENDM
+
+; copy 2 bytes from (@1) to (@0)
+.MACRO	COPY_PORT
+	ldstt2	@0, @1
+.ENDM
+
+; set register to appropriate point in OP buffer
+.MACRO	setlop
+	ldw	@0, LAN_OP_BUF
+	adiw	@0, @1-LAN_BUF			; set offset to LAN*_ETH_TYPE data
+.ENDM
+

@@ -1,0 +1,69 @@
+; BIOS Function codes
+
+; Standard CPM 2.2
+.EQU	BIOS_FUNC_COLD_START	= 0x00
+.EQU	BIOS_FUNC_START		= 0x01
+.EQU	BIOS_FUNC_CONST		= 0x02
+.EQU	BIOS_FUNC_CONIN		= 0x03
+.EQU	BIOS_FUNC_CONOUT	= 0x04
+.EQU	BIOS_FUNC_LIST		= 0x05
+.EQU	BIOS_FUNC_PUNCH		= 0x06
+.EQU	BIOS_FUNC_READER	= 0X07
+.EQU	BIOS_FUNC_HOME		= 0x08
+.EQU	BIOS_FUNC_SELDISK	= 0X09
+.EQU	BIOS_FUNC_SETTRK	= 0X0a
+.EQU	BIOS_FUNC_SETSEC	= 0x0b
+.EQU	BIOS_FUNC_SETDMA	= 0x0c
+.EQU	BIOS_FUNC_READ		= 0x0d
+.EQU	BIOS_FUNC_WRITE		= 0x0e
+.EQU	BIOS_FUNC_LISTST	= 0x0f
+.EQU	BIOS_FUNC_SECTRN	= 0x10
+
+; Standard CPM 3.0
+
+; Extended CRISS, no direct call, internal call BIOS, code in temp
+.EQU	BIOS_FUNC_CONBUF_APPEND	= 0xf0
+.EQU	BIOS_FUNC_PRBUF_APPEND	= 0xf1
+
+;.EQU	BIOS_FUNC_REFRESH_HW	= 0xf8
+.EQU	BIOS_FUNC_CHAROUT_RAW	= 0xf9
+.EQU	BIOS_FUNC_CRT_ATTR	= 0xfa
+.EQU	BIOS_FUNC_ECON_ATTR_GET	= 0xfb
+.EQU	BIOS_FUNC_ECON_ATTR_SET	= 0xfc
+.EQU	BIOS_FUNC_CRT_CHAR	= 0xfd	; raw output to crt
+.EQU	BIOS_FUNC_SET_VIDEOMODE	= 0xfe
+.EQU	BIOS_FUNC_CRT_RESET	= 0xff	; reset crt settings
+
+.MACRO	BIOS_CALL
+	ldi	temp, @0
+	call	BIOS
+.ENDM
+
+/*
+	tcbe	0x00, BIOS_L00
+	tcbe	0x01, BIOS_L01
+	tcbe	0x02, BIOS_L02		; CONST
+	tcbe	0x03, BIOS_L03		; CONIN
+	tcbe	0x04, BIOS_L04		; CONOUT
+	tcbe	0x05, BIOS_L05		; LIST
+	tcbe	0x06, BIOS_L06		; PUNCH
+	tcbe	0x07, BIOS_L07		; READER
+	tcbe	0x08, BIOS_L08		; HOME
+	tcbe	0x09, BIOS_L09		; SELDISK
+	tcbe	0x0a, BIOS_L0A		; SETTRK
+	tcbe	0x0b, BIOS_L0B		; SETSEC
+	tcbe	0x0c, BIOS_L0C		; SETDMA
+	tcbe	0x0d, BIOS_L0D		; READ
+	tcbe	0x0e, BIOS_L0E		; WRITE
+	tcbe	0x0f, BIOS_L0F		; LISTST
+	tcbe	0x10, BIOS_L10		; SECTRN
+	
+	;!!! internal only calls !!!
+	tcbe	0xf0, BIOS_Lf0		; CRISS: append to con buffer
+	tcbe	0xf1, BIOS_Lf1		; CRISS: append to pr buffer
+	tcbe	0xfb, ECON_GET_ATTR	; get attribute for curr char, return to temp
+	tcbe	0xfc, ECON_SET_ATTR	; set attribute in zzC
+	tcbe	0xfd, BIOS_CRT_CHAR	; raw send char to CRT
+	tcbe	0xfe, BIOS_SET_VIDEO_MODE ; SET VIDEO MODE
+	tcbe	0xff, _BIOS_RESET	; RESET
+*/

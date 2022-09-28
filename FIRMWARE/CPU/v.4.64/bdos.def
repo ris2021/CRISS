@@ -1,0 +1,71 @@
+.EQU	BDOS_01_CONIN	= 0x01 ; READ CONSOLE   NONE              Œ»-7 CHAR IN A
+.EQU	BDOS_02_CONOUT	= 0x02 ; WRITE CONSOLE   Œ»-7 CHAR IN E  NONE
+.EQU	BDOS_03_AUXIN	= 0x03 ; AUXILIARY INPUT
+.EQU	BDOS_03_RDRIN	= 0x03 ; READ READER    NONE              Œ»-7 CHAR IN A
+.EQU	BDOS_04_AUXOUT	= 0x04 ; AUXILIARY OUTPUT
+.EQU	BDOS_04_PUNOUT	= 0x04 ; WRITE PUNCH     Œ»-7 CHAR IN E  NONE
+.EQU	BDOS_05_LSTOUT	= 0x05 ; WRITE LIST      Œ»-7 CHAR IN E  NONE
+.EQU	BDOS_06_DCONIO	= 0x06 ; DIRECT CON I/O  Œ»-7 CHAR IN E  I/O STATUS IN A
+;                                                          IF E=0FEH,
+;                                                         INPUT IF E=0FFH
+.EQU	BDOS_07_AUXIST	= 0x07 ; GET AUXIN: STATUS               A=FF IS CHARACTER
+;                                                         READY, A=0 IF NONE
+.EQU	BDOS_07_GTIOB	= 0x07 ; GET I/O STATUS NONE             I/O STATUS IN A
+.EQU	BDOS_08_AUXOST	= 0x08 ; GET AUXOUT: STATUS              A=FF IF READY, A=0
+;	                                                         IF NOT READY
+.EQU	BDOS_08_PTIOB	= 0x08 ; PUT I/O STATUS I/O STATUS IN E  NONE
+.EQU	BDOS_09_PRSTR	= 0x09 ; PRINT STRING   STRING-ADDRESS   NONE
+;                                        IN DE (TERM=$)
+.EQU	BDOS_0A_RDSTR	= 0x0A ; READ BUFFER    BUFFER-ADDRESS  READ BUFFER FILLED
+;                                        IN DE
+;       READ BUFFER     BYTE    FUNCTION
+;                          1     MAXIMUM BUFFER LENGTH
+;                          2     CURRENT BUFFER LENGTH (RETURNED VALUE)
+;                        3-N     DATA (RETURNED VALUES)
+; 
+.EQU	BDOS_0B_CONSTA	= 0x0B ; CONSOLE STAT   NONE            LSB(A)=1 IF CHAR READY
+.EQU	BDOS_0D_INBDOS	= 0x0D ; INIT BDOS      NONE            NONE
+.EQU	BDOS_0E_LOGDSK	= 0x0E ; LOG-IN DISK    VALUE IN E      NONE
+;                                        A=0,B=1,...
+.EQU	BDOS_0F_OPENF	= 0x0F ; OPEN FILE      FCB-ADDR IN DE  BYTE ADDR.OF FCB,
+;                                                         OR 0FFH IF NOT
+.EQU	BDOS_10_CLOSF	= 0x10 ; CLOSE FILE     FCB-ADDR IN DE  BYTE ADDR.OF FCB,
+;                                                         OR 0FFH IF NOT
+.EQU	BDOS_11_SFIRST	= 0x11 ; SEARCH FILE    FCB-ADDR IN DE  BYTE ADDR.OF FCB(0-3),
+;                                                         OR 0FFH IF NOT
+.EQU	BDOS_12_SNEXT	= 0x12 ; SEARCH NEXT    FCB-ADDR IN DE  BYTE ADDR.OF NEXT FCB,
+;                                                         OR 0FFH IF NOT
+.EQU	BDOS_13_DELF	= 0x13 ; DELETE FILE    FCB-ADDR IN DE  BYTE ADDR.OF FCB(0-3),
+;                                                         OR 0FFH IF NOT
+.EQU	BDOS_14_READF	= 0x14 ; READ RECORD    FCB-ADDR IN DE  0=SUCCESSFUL READ
+;                                                        1=READ PAST EOF
+;                                                        2=READING RANDOM DATA
+.EQU	BDOS_15_WRITEF	= 0x15 ; WRITE RECORD   FCB-ADDR IN DE  0=SUCCESSFUL WRITE
+;                                                        1=ERROR EXTENDING
+;                                                        2=END OF DISK DATA
+;                                                        255=NO MORE DIR SPACE
+.EQU	BDOS_16_MAKEF	= 0x16 ; 
+.EQU	BDOS_17_RENAM	= 0x17 ; 
+.EQU	BDOS_18_RDLOG	= 0x18 ; RET. LOG CODE  NONE            LOGIN VECTOR IN HL
+.EQU	BDOS_19_RDDRV	= 0x19 ; READ DRIVE #   NONE            # OF LOGGED IN DRIVE IN
+;                                                        (A=0,B=1,C=2....)
+.EQU	BDOS_1A_SETDMA	= 0x1A ; SET DMA ADDR.  ADDR. OF 128    NONE
+;                                        BYTE BUFFER IN DE
+.EQU	BDOS_1B_GETALV	= 0x1B ; GET ALL.VECT.  NONE            ALL.VECT IN HL
+.EQU	BDOS_1C_WRTPRT	= 0x1C ; WRITE PROT DSK NONE            NONE
+.EQU	BDOS_1D_GETROV	= 0x1D ; GET R/O VECT.  NONE            HL= R/O VECT. VALUE
+.EQU	BDOS_1E_SETFAT	= 0x1E ; SET FILE ATTR. FCB-ADDR.IN DE  DIR. CODE IN A
+.EQU	BDOS_1F_GTDPAR	= 0x1F ; GET DSK PAR.   NONE            HL=DPB ADDRESS
+.EQU	BDOS_20_USRCOD	= 0x20 ; GET/SET USR.CD E=0FFH (GET)    A=CURRENT CODE (GET)
+;                                        E-CODE (SET)    A=NO VALUE (SET)
+.EQU	BDOS_21_RRAND	= 0x21 ; READ  RANDOM   FCB-ADDR IN DE  A=RETURN CODE
+.EQU	BDOS_22_WRAND	= 0x22 ; WRITE RANDOM   FCB-ADDR IN DE  1=READ'G UNWRITTEN DATA
+;                                                        2=(NOT USED)
+;                                                        3=CAN'T CLOSE CURR. EXT
+;                                                        4=SEEK TO UNWR. EXT.
+;                                                        5=DIR OVERFLOW(WRITE)
+;                                                        6=SEEK PAST END OF DSK
+.EQU	BDOS_23_CFLSZ	= 0x23 ; COMP FILE SZ.  FCB ADDR.IN DE  RAND.REC.FIELD SET TO
+;                                                         FILE SIZE
+.EQU	BDOS_24_SETRAR	= 0x24 ; SET RAND. REC. FCB-ADDR.IN DE  RAND.REC.FIELD SET
+;

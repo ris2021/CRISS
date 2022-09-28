@@ -1,0 +1,104 @@
+.EQU    SPI_SLAVE_CPD   = 0                             ; Y0
+.EQU    SPI_SLAVE_RTC   = (1<<PB1)                      ; Y1
+.EQU    SPI_SLAVE_ROM   = (1<<PB2)			; Y2
+.EQU    SPI_SLAVE_CRST  = (1<<PB1)|(1<<PB2)             ; Y3
+.EQU    SPI_SLAVE_LAN   = (1<<PB0)			; Y4
+.EQU    SPI_SLAVE_BUZ   = (1<<PB0)|(1<<PB1)             ; Y5
+.EQU    SPI_SLAVE_IRQ   = (1<<PB0)|(1<<PB1)             ; Y5
+.EQU    SPI_SLAVE_SD    = (1<<PB0)|(1<<PB2)             ; Y6
+.EQU    SPI_SLAVE_LED   = (1<<PB0)|(1<<PB1)|(1<<PB2)    ; Y7
+.EQU    SPI_SLAVE_CAN   = (1<<PB0)|(1<<PB1)|(1<<PB2)    ; Y7
+
+.EQU    SPI_FCK_SPI2X 	= 0x40
+
+.EQU    SPI_FCK_DIV_2   = (SPI_FCK_SPI2X)|0
+.EQU    SPI_FCK_DIV_4   = 0
+.EQU    SPI_FCK_DIV_8   = (SPI_FCK_SPI2X)|(1<<SPR0)
+.EQU    SPI_FCK_DIV_16  = (1<<SPR0)
+.EQU    SPI_FCK_DIV_64	= (1<<SPR1)
+.EQU    SPI_FCK_DIV_128	= (1<<SPR0)|(1<<SPR1)
+
+.EQU    SPI_FCK_DIV_16_CPHA	= (1<<SPR1) | (1<<CPHA) 
+.EQU    SPI_FCK_DIV_64_CPHA	= (1<<SPR1) | (1<<CPHA) 
+
+; Init SPI: @0 = slave address, @1 = prescaler settings
+.MACRO	SPI_INIT
+	push  	temp
+  	_out	PORTB, (1<<PB4) | @0  ; SPI disabled
+	_out	DDRB, (1<<PB0)|(1<<PB1)|(1<<PB2)|(1<<PB4)|(1<<PB7)|(1<<PB5)
+
+  	_out	SPSR, @1>>4	; SPI2X
+  	_out	SPCR, (1<<SPE) | (1<<MSTR) | (@1 & 0x0f)	; Start SPI in Master Mode @1 = clock divider
+
+  	cbi	PORTD, PD1		; enable SPI decoder
+	pop   	temp
+.ENDM
+
+
+; Init SPI from stack: temp contains address, first pop returns prescaler
+.MACRO	SPI_INIT_STACK
+;	pop  	temp
+	andi	temp, 0x0f		; mask just for the case
+	ori	temp, (1<<PB4)
+	out	PORTB, temp
+;  	_out	PORTB, (1<<PB4) | @0  ; SPI disabled
+	_out	DDRB, (1<<PB0)|(1<<PB1)|(1<<PB2)|(1<<PB4)|(1<<PB7)|(1<<PB5)
+
+	pop	temp
+	push	temp		; get and save for the next step prescaler
+	swap	temp
+	andi	temp, 0x01	; SPI2X flag if any
+  	out	SPSR, temp	; SPI2X
+
+	pop	temp		; prescaler
+	andi	temp, 0x0f
+	ori	temp, (1<<SPE) | (1<<MSTR)
+	out	SPCR, temp
+;  	_out	SPCR, (1<<SPE) | (1<<MSTR) | @1	; Start SPI in Master Mode 20/4 MHz
+
+  	cbi	PORTD, PD1		; enable SPI decoder
+;	pop   	temp
+.ENDM
+
+
+; select slave
+.MACRO	SPI_SELECT
+  	cbi	PORTB, PB4     ; select slave
+.ENDM
+
+
+; deselect slave
+.MACRO    SPI_DESELECT
+  	sbi	  PORTB, PB4     ; deselect slave
+.ENDM
+
+
+; disable SPI
+.MACRO    SPI_STOP
+;	push	temp
+;	_out	SPCR, 0       		; disable SPI
+	out	SPCR, zero       	; disable SPI
+  	sbi	PORTD, PD1		; disable SPI decoder
+;    	_out  	DDRB, 0       		; release data port
+    	out  	DDRB, zero       	; release data port
+;    	pop   	temp
+.ENDM
+
+
+; send data to SPI
+.MACRO	iSPI
+	ldi	temp, @0
+	call	DOSPI
+.ENDM
+
+; send data to SPI
+.MACRO	tSPI
+	ldi	temp, @0
+	call	DOSPI
+.ENDM
+
+; send data to SPI
+.MACRO	rSPI
+	mov	temp, @0
+	call	DOSPI
+.ENDM
