@@ -41,8 +41,8 @@ CRISS CP/M computer contains 4 AVR MCU: 2 (ATTINY13 + ATMEGA328P) are for genera
 <table border=1>
   <tr><th>Role</th><th>Name</th><th>Type</th><th>Bootloader folder</th><th>Firmware folder</th><th>Comments</th></tr>
   <tr><td>VGA controller - sync generation</td><td>VGA-AT13</td><td>ATTINY13A</td><td>-</td><td>VGA-AT13</td><td></td></tr>
-  <tr><td>VGA controller - chars generator</td><td>VGA-M328P</td><td>ATMEGA328P</td><td>BOOTLOADERS/VGA</td><td>VGA-M328-FW</td><td></td></tr>
-  <tr><td>Pripheral controller</td><td>CPD</td><td>ATMEGA328P</td><td>BOOTLOADERS/CPD</td><td>CPD-FW</td><td></td></tr>
-  <tr><td>Main CPU</td><td>CPU</td><td>ATMEGA1284P</td><td>BOOTLOADERS/CPU</td><td>CPU-FW</td><td></td></tr>
+  <tr><td>VGA controller - chars generator</td><td>VGA-M328P</td><td>ATMEGA328P</td><td>BOOTLOADERS/VGA</td><td>FIRMWARE/VGA<br>FIRMWARE/VGA-FONTS</td><td></td></tr>
+  <tr><td>Pripheral controller</td><td>CPD</td><td>ATMEGA328P</td><td>BOOTLOADERS/CPD</td><td>FIRMWARE/CPD</td><td></td></tr>
+  <tr><td>Main CPU</td><td>CPU</td><td>ATMEGA1284P</td><td>BOOTLOADERS/CPU</td><td>FIRMWARE/CPU</td><td></td></tr>
 </table>  
 
