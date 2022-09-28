@@ -1,0 +1,54 @@
+; CPD RAM definitions
+.DSEG
+.ORG	0x100
+video:	.BYTE	25*80	; video ram 2000 bytes
+
+.ORG	0x100+25*80
+
+PORTS:	;0x08d0
+; 0
+vstat:	.BYTE	1	; CRT control byte bit7 = reserved, bits 6-3 = lines, 2-0 = codepage
+vcurh:	.BYTE	1	; cursorH
+vcurl:	.BYTE	1	; cursorL
+
+; 3
+kmodk:	.BYTE	1	; modkeys: 7=pressed flag, 6=e0 5=f0 4=alt 3=capslock, 2=scrollock,  1=shift, 0=ctrl
+kactk:	.BYTE	1	; key ps/2 (ext) scancode value
+kchar:	.BYTE	1	; key decoded value
+
+; 6
+mpcmd:	.BYTE	1	; music port cmd: 
+			; bit 7 = 0; bits 6-0 - basic note duration (10 ms step) 
+			; 0x80 - 0x8f = read system melody 0-16 from EPROM
+
+; 7
+twcmd:	.BYTE	1	; twi command to execute (write) status (read)
+twdti:  .BYTE	1	; twi 8bit data to write operation and from read operation
+
+; 9
+mousx:	.BYTE	1       ; mouse resolution x
+mousy:	.BYTE	1       ; mouse resolution y
+
+; 11
+sysrq:	.BYTE	1	; system command: out: 0x81 = read; 0x82 = write, 0x83 = write word, in: 0x?0 = complete, bit 6 = mouse on
+sysaa:	.BYTE	1	; system command data (low)
+sysvv:	.BYTE	1	; system command data (high)
+
+; 14
+ctcvv:	.BYTE	1       ; CTC max count value
+
+; 15
+comtc:	.BYTE	1       ; COM-port transmit counter
+
+; 16 0x8e0
+mpbuf:	.BYTE	16	; melody data: bits 7-3 = tone, bits 2-0 = duration, 0 = pause, ff = end
+
+; 17 0x8f0
+irqfl:	.BYTE	1	; IRQ flags
+
+comst:	.BYTE	1       ; COM-port status
+comtx:	.BYTE	1       ; COM-port Tx data (w/only)
+comrx:	.BYTE	1       ; COM-port Rx Data (r/only)
+
+; 36 stack 0x08f0
+stack: 	.BYTE	12      ; stack for 6 nested calls

@@ -1,0 +1,45 @@
+	; registers definition
+
+	.DEF	vga0	= r3	; used by VGA SPI
+  	.DEF	vga1	= r4  	; used by VGA SPI
+  	.DEF	vga2	= r5  	; used by VGA SPI
+
+	.DEF	_sreg	= r6    ; store SREG in interrupts
+
+  	.DEF	zero	= r9  	; ==0
+
+	; melody processor
+	.DEF	mpcnt	= r10   ; current playing note 0x0f = first, 0x00 = last
+	.DEF	mpdur 	= r12	; current playing note time rest
+  	.DEF	mnstp	= r13	; stop playing when playing time == mnstp
+  	
+	.DEF	twistat	= r16   ; twi processing state
+
+	; Keyboard
+	.DEF	kbcntr	= r23	; pulse counter
+	.DEF	kbdata	= r20	; data read
+  	.DEF	kbmdkey	= r21	; modkeys state
+  	.DEF	kbread	= r14   ; read value to process
+	.DEF	kbledr	= r7	; keyboard - led change request
+	.DEF	kblpb	= r8    
+  	.DEF	kbldata	= r11
+
+	; temp vars
+;  	.DEF	temp2	= r15	; 
+	.DEF	temp	= r17   ; main temp var
+	.DEF	itemp	= r18   ; temp var for interupts
+  	.DEF	tdata	= r19   ; temp var 2 for data transfer
+
+  	; system counter
+	.DEF	tmrcntr = r22   ; system timer counter in 10ms step loop 0..99
+
+	.DEF	WL	= r24
+	.DEF	WH	= r25
+
+;	.DEF	X		; used by cpurequest
+	.DEF	cpr0	= r0	; used by cpurequest
+	.DEF	cpr1	= r1	; used by cpurequest
+	.DEF	cpr2	= r2	; used by cpurequest
+
+;	.DEF	Y		; videoram ptr for VGA sync 
+;	.DEF	Z		; ussing for lpm access

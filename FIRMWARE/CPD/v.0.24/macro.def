@@ -1,0 +1,116 @@
+;запись в регистр (через temp)
+.MACRO	_ldi
+		ldi		temp, @1
+		mov		@0, temp		
+.ENDM
+
+;запись в порт (через temp)
+.MACRO	_out
+		ldi		temp, @1
+		out		@0, temp		
+.ENDM
+
+;запись в порт (через temp)
+.MACRO	_outm
+		ldi		temp, @1
+		sts		@0, temp		
+.ENDM
+
+;запись WORD в порт (через temp) RL, RH, VAL
+.MACRO	_outw
+		_out	@1, high(@2)
+		_out	@0, low(@2)
+.ENDM
+
+;запись WORD в порт (через temp) RL, RL, VAL
+.MACRO	_outwm
+		_outm	@1, high(@2)
+		_outm	@0, low(@2)
+.ENDM
+
+// cpi via temp
+.MACRO	_cpi
+		ldi		temp, @1
+		cp		@0, temp
+.ENDM
+
+//	delay for 3,6,9,12,... cycles
+.MACRO 	delay3 //1=3 2=1+1*3+2
+		ldi		temp, @0/3		//+1
+_dlloop:
+		dec		temp				//+1
+		brne	_dlloop				//+2/1
+.ENDM
+
+// compare, skip if equal via temp	
+.MACRO _cpse
+		ldi		temp, @1
+		cpse	@0, temp
+.ENDM
+
+// compare, skip if equal via temp	
+.MACRO _ori
+		ldi		temp, @1
+		or		@0, temp
+.ENDM
+
+// compare, skip if equal via temp	
+.MACRO _andi
+		ldi		temp, @1
+		and		@0, temp
+.ENDM
+
+; push double registor
+.MACRO	pushw
+	push	@0H
+	push	@0L
+.ENDM
+
+; pop double registor
+.MACRO	popw
+	pop	@0L
+	pop	@0H
+.ENDM
+
+; compare value @0 with temp, rjump to @1 
+.MACRO	tcbe
+	cpi	temp, @0
+	brne	_tcbeno
+	rjmp	@1
+_tcbeno:
+.ENDM
+
+; put hex value from tdata to memory @0
+.MACRO 	MEM_HEX
+    	push  	tdata
+;    mov   tdata, @0
+    	lsr   	tdata
+    	lsr   	tdata
+    	lsr   	tdata
+    	lsr   	tdata
+    	cpi   	tdata, 10
+    	brlo  	tl_01    
+    	ldi   	temp, 'a'-'0'-10
+    	add   	tdata, temp
+tl_01:
+    	ldi   	temp, '0'
+    	add   	tdata, temp
+    	sts   	@0, tdata
+
+    	pop   	tdata
+;    mov   tdata, @0
+    	andi  	tdata, 0x0f
+    	cpi   	tdata, 10
+    	brlo  	tl_02    
+    	ldi   	temp, 'a'-'0'-10
+    	add   	tdata, temp
+tl_02:
+    	ldi   	temp, '0'
+    	add   	tdata, temp
+    	sts   	@0+1, tdata
+.ENDM
+
+.MACRO	RETI_S
+	out	SREG, _sreg
+	reti
+.ENDM

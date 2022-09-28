@@ -1,0 +1,10 @@
+; irqfl flags
+	.EQU	IRQ_COM_RX	= 7	; COM-port char received
+	.EQU	IRQ_COM_TX	= 6     ; COM-port clear to send
+	.EQU	IRQ_MOUSE	= 5     ; Mouse/joistick pointer changed
+	.EQU	IRQ_____	= 4     ; 
+	.EQU	IRQ_MUSIC	= 3	; MUSIC synthesator - end of melody
+	.EQU	IRQ_CTC		= 2     ; Timer == 0
+	.EQU	IRQ_GPIO	= 1     ; GPIO ????
+	.EQU	IRQ_KBD		= 0 	; Keyboard key pressed
+
