@@ -7,11 +7,11 @@ CP/M 2.2 compiled from Digital Research sources.
 Reconstruction of Clark A. Calkins February 27, 1981 was used
 Important! Requires CPU firmware 3.64+
 Provides 55 kB TPA space!
-Source code in Z80 mneminic is included. Us Macro Assembler AS V1.42 to compile.
+Source code in Z80 mneminic is included. Use Macro Assembler AS V1.42 to compile.
 http://john.ccac.rwth-aachen.de:8000/as/
 
-Операционная система CP/M 2.2, собранная из исходных кодов Digital Research
-Важно! Работает с версией прошивки CPU 3.64+
-В данной версии доступно 55кБ TPA, что обеспечивает корректную работу Hitech C и JANUS ADA.
-Исходный код ОС в комплекте. Компилировалось с помощью Macro Assembler AS V1.42
+┼╜┬п┬е├а┬а├ж┬и┬о┬н┬н┬а├п ├б┬и├б├в┬е┬м┬а CP/M 2.2, ├б┬о┬б├а┬а┬н┬н┬а├п ┬и┬з ┬и├б├е┬о┬д┬н├л├е ┬к┬о┬д┬о┬в Digital Research
+тАЪ┬а┬ж┬н┬о! ┬Р┬а┬б┬о├в┬а┬е├в ├б ┬в┬е├а├б┬и┬е┬й ┬п├а┬о├и┬и┬в┬к┬и CPU 3.64+
+тАЪ ┬д┬а┬н┬н┬о┬й ┬в┬е├а├б┬и┬и ┬д┬о├б├в├г┬п┬н┬о 55┬к┬Б TPA, ├з├в┬о ┬о┬б┬е├б┬п┬е├з┬и┬в┬а┬е├в ┬к┬о├а├а┬е┬к├в┬н├г├о ├а┬а┬б┬о├в├г Hitech C ┬и JANUS ADA.
+╦Ж├б├е┬о┬д┬н├л┬й ┬к┬о┬д ┼╜тАШ ┬в ┬к┬о┬м┬п┬л┬е┬к├в┬е. ┼а┬о┬м┬п┬и┬л┬и├а┬о┬в┬а┬л┬о├б├м ├б ┬п┬о┬м┬о├й├м├о Macro Assembler AS V1.42
 http://john.ccac.rwth-aachen.de:8000/as/
