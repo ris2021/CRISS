@@ -27,9 +27,9 @@ CRISS CP/M: the modern single-board 8-bit full-featured personal computer! Amazi
 Please find more info at:
 <ul>
 <li> https://discord.gg/g5u5Ge2C - worldwide community of CRISS users and followers
+<li> https://hackaday.io/project/181038 - project page at HACKADAY.IO, don't forget to like project!
 <li> http://www.criss.fun - programmer's and user's manuals and technical reference in English
 <li> http://criss.radio.ru - сайт технической поддержки на русском языке
-<li> https://hackaday.io/project/181038 - project page at HACKADAY.IO, don't forget to like project!
 
 It is 100% open project and you can use it as you want without any restrictions, the only thing I would ask: please preserve "CRISS" in the name in your projects! Reference to the original project will be appreciated! 
   
