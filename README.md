@@ -2,7 +2,7 @@
 
 The first DIY full-featured computer supporting VGA, Mouse, Pronter, Ethernet, RTC, GPIO with CP/M OS and Z80 compatible instuction set! No kits and pre-assebled boards, DIP components only, clear design and standard Atmel AVR ATMEGA and ATTINY MCUs only!
 
-<img src=http://criss.fun/criss/15002.png>
+<img src=criss_bw_draw.png>
 
 CRISS CP/M: the modern single-board 8-bit full-featured personal computer! Amazing functionality for the DIY device: it is not a toy, it is REAL Computer, the SAFEST computer in the world and the sophisticated control platform for your projects!
 
