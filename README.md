@@ -4,7 +4,13 @@ The first DIY full-featured computer supporting VGA, Mouse, Pronter, Ethernet, R
 
 <img src=criss_bw_draw.png>
 
-CRISS CP/M: the modern single-board 8-bit full-featured personal computer! Amazing functionality for the DIY device: it is not a toy, it is REAL Computer, the SAFEST computer in the world and the sophisticated control platform for your projects!
+CRISS is a 21st-century CP/M single-board computer based mainly on AVR microcontrollers. The CPU is a 20 MHz ATMEGA1284P, which imitates a 4 MHz Z80 through machine-code emulation. A pair of ATMEGA328s run the peripheral controller and a VGA output, so the CRISS can be used with modern monitors. True to its heritage however, the image is monochrome green-on-black, looking instantly familiar to users of Kaypro's, Osborne's and other contemporary CP/M machines.
+
+Software is loaded through an SD card that holds floppy images. The CRISS can directly run programs written for the Kaypro II and Robotron 1715 computers, although other platforms can be supported as well with a software upgrade. 
+
+Housed in a neat little case (13x10cm PCB size), the CRISS can communicate with standard PS/2 keyboards and serial printers. Even an Ethernet port is provided for those willing to experiment with network connectivity (a rare feature in the 1980s).
+
+Amazing functionality for the DIY device: it is not a toy, it is REAL Computer, the SAFEST computer in the world and the sophisticated control platform for your projects!
 
 <h2>Features:</h2>
 
