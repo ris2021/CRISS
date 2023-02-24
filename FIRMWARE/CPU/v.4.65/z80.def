@@ -1,0 +1,463 @@
+	.EQU	ADDRHPORT 	= PORTC
+	.EQU	ADDRLPORT 	= PORTA
+	.EQU	CTRLPORT 	= PORTD
+	.EQU	DATAPORT 	= PORTB
+	.EQU	DATADDR 	= DDRB
+	.EQU	DATAPIN 	= PINB
+	.EQU	RWE 		= PD5
+	.EQU	ROE 		= PD4
+
+	; z80 flags
+	.EQU	zzZF = 1
+	.EQU	zzCF = 0
+	.EQU	zzPF = 3
+	.EQU	PF = zzPF
+	.EQU	zzSF = 2
+	.EQU	zzVF = 3
+	.EQU	zzHF = 5
+	.EQU	zzNF = 6
+	.EQU	zzIF = 7
+
+	.EQU	_I_ = 1<<zzIF
+	.EQU	_Z_ = 1<<zzZF
+	.EQU	_C_ = 1<<zzCF
+	.EQU	_P_ = 1<<zzPF
+	.EQU	_S_ = 1<<zzSF
+	.EQU	_V_ = 1<<zzVF
+	.EQU	_H_ = 1<<zzHF
+	.EQU	_N_ = 1<<zzNF
+	.EQU	___ = 0
+
+
+; read from RAM from current position 0 = reseiver, inc PC
+.MACRO LDRAM_PC
+	out 	ADDRHPORT, zzPCh      	; +1
+	out 	ADDRLPORT, zzPCl	; +1
+	out 	DATADDR, ZERO          	; +1
+;	nop
+;	cbi   	PORTD, PD4              ; +2 /OE pulse start
+	out	CTRLPORT, RAMOE		; +1
+;       nop
+	adiw	zzPCl,1			; +2
+	in	@0, DATAPIN           	; +1	
+	out	CTRLPORT, FF		; +1    =+9
+.ENDM	
+
+.MACRO LDRAM_PC_NODDR
+	LDRAM_PC @0
+.ENDM
+
+.MACRO _LDRAM_PC_NODDR
+	out 	ADDRHPORT, zzPCh      	; +1
+	out 	ADDRLPORT, zzPCl	; +1
+	out 	DATADDR, ZERO          	; +1
+;	sbi	CTRLPORT, ROE		; +2
+;	inc	zzR			; +1 
+;	nop
+;	cbi   	PORTD, PD4              ; /OE pulse start
+	out	CTRLPORT, RAMOE		; +1
+;	nop
+;	nop
+	adiw	zzPCl,1			; +2
+	in	@0, DATAPIN           	; +1	
+;	cbi	CTRLPORT, ROE		; +2
+	sbi	CTRLPORT, 4	;!!!! вернуть после перевода пищалки!!!!	
+;	out	CTRLPORT, FF		; +1    =+8
+.ENDM	
+
+.MACRO LDRAM_NODDR
+	out 	ADDRHPORT, @0      	; +1
+	out 	ADDRLPORT, @1		; +1
+	out 	DATADDR, ZERO          	; +1
+;	nop
+;	cbi   	PORTD, PD4              ; /OE pulse start
+	out	CTRLPORT, RAMOE		; +1
+	nop
+	nop
+	in	@2, DATAPIN           	; +1	
+	out	CTRLPORT, FF		; +1    =+9
+.ENDM	
+
+.MACRO LDRAM
+	out 	ADDRHPORT, @0      	; +1
+	out 	ADDRLPORT, @1		; +1
+	out 	DATADDR, ZERO          	; +1
+;	nop
+;	cbi   	PORTD, PD4              ; /OE pulse start
+	out	CTRLPORT, RAMOE		; +1
+	nop
+	nop
+	in	@2, DATAPIN           	; +1	
+	out	CTRLPORT, FF		; +1    =+9
+.ENDM	
+
+; z80 load word (@2,@3) from ram (@0,@1)
+.MACRO 	LDRW_NODDR
+    	mov 	FROMRAM1, @0
+	mov 	FROMRAM2, @1
+	LDRAM_NODDR FROMRAM1,FROMRAM2,@3
+	INC2 	FROMRAM1, FROMRAM2
+	LDRAM_NODDR FROMRAM1, FROMRAM2,@2
+.ENDM	
+
+.MACRO _stram
+	out   	PORTC, @0
+    	out   	PORTA, @1         	; set address
+	out	PORTB, @2
+   	_out  	DDRB, 0xff        	; Data port to out
+	cbi   	PORTD, PD5
+	sbi	PORTD, PD5         	; /WE pulse
+.ENDM
+
+.MACRO _ldram
+	out   	PORTC, @0
+    	out   	PORTA, @1         	; set address
+	_out	DDRB, 0			; Data port to in
+;	nop                             
+	cbi   	PORTD, PD4              ; /OE pulse start
+	nop                             
+	in    	@2, PINB        	; read port value
+	sbi	PORTD, PD4         	; /OE pulse end
+.ENDM
+
+
+.MACRO STRAM
+	out 	ADDRHPORT, @0      	; +1
+	out 	ADDRLPORT, @1		; +1
+	out	DATAPORT, @2
+	out 	DATADDR, FF          	; +1
+;        in	_sreg, SREG                 	;!!!!!! FOR (HL) OPERANDS!!!!! –ј«ƒ≈Ћ»“№ !!!!!!
+;	sbi	CTRLPORT, RWE		; +2
+;	inc	zzR			; +1 
+        cp	@0, VIDEORAM		; +1		; videoram?
+;        nop
+	cbi   	PORTD, PD5
+;	out	CTRLPORT, RAMWE		; +1
+	brlo	STRAM_NOVRAM		; +2
+;        nop
+
+	out	CTRLPORT, FF		; +1  		; stop write
+
+	; video ram - send char to CPD
+	SPI_INIT SPI_SLAVE_CPD, SPI_FCK_DIV_4		
+	SPI_SELECT
+	push	@2
+	mov	temp, @0
+	call	DOSPI
+	delay3	12
+	mov	temp, @1
+	call	DOSPI
+	delay3	12
+	pop	temp
+	call	DOSPI
+	SPI_STOP
+
+STRAM_NOVRAM:
+	out	CTRLPORT, FF		; +1    =+9
+STRAM_END:
+
+.ENDM	
+
+.MACRO STRAM_NODDR
+	STRAM	@0,@1,@2
+.ENDM
+
+/*
+.MACRO __STRAM_NODDR
+	out 	ADDRHPORT, @0      	; +1
+	out 	ADDRLPORT, @1		; +1
+	out	DATAPORT, @2
+;	out 	DATADDR, FF          	; +1
+;	sbi	CTRLPORT, RWE		; +2
+;	inc	zzR			; +1 
+        cp	@0, VIDEORAM		; +1		; videoram?
+	cbi   	PORTD, PD5
+;	out	CTRLPORT, RAMWE		; +1
+	brlo	STRAM_NOVRAM		; +2
+
+	sbi	CTRLPORT, 5	;!!!! вернуть после перевода пищалки!!!!	
+;	out	CTRLPORT, FF		; +1  		; stop write
+	; video ram - send char to CPD
+	SPI_INIT SPI_SLAVE_CPD, SPI_FCK_DIV_4		
+	SPI_SELECT
+	mov	temp, @0
+	call	DOSPI
+	mov	temp, @1
+	call	DOSPI
+	mov	temp, @2
+	call	DOSPI
+	SPI_STOP
+	out 	DATADDR, FF          	; +1		; restore DDR
+
+STRAM_NOVRAM:
+	sbi	CTRLPORT, 5	;!!!! вернуть после перевода пищалки!!!!	
+;	out	CTRLPORT, FF		; +1    =+9
+.ENDM	
+*/
+
+.MACRO STRAM_RAMONLY
+	out 	ADDRHPORT, @0      	; +1
+	out 	ADDRLPORT, @1		; +1
+	out	DATAPORT, @2
+	out 	DATADDR, FF          	; +1
+;        in	_sreg, SREG                 	;!!!!!! FOR (HL) OPERANDS!!!!! –ј«ƒ≈Ћ»“№ !!!!!!
+;	sbi	CTRLPORT, RWE		; +2
+;	inc	zzR			; +1 
+;        cp	@0, VIDEORAM		; +1		; videoram?
+;        nop
+	cbi   	PORTD, PD5
+;	out	CTRLPORT, RAMWE		; +1
+;	brlo	STRAM_NOVRAM		; +2
+        nop
+
+	out	CTRLPORT, FF		; +1  		; stop write
+.ENDM	
+
+
+; increment word register: high, low
+.MACRO INC2 
+	add	@1, ONE
+	adc 	@0, ZERO
+.ENDM	
+
+; decrement word register: high, low
+.MACRO DEC2 
+	sub	@1, ONE
+	sbc 	@0, ZERO
+.ENDM	
+
+; add signed @2 to 16-bit unsigned @0(high) @1(low)
+.MACRO ADDWS 
+	clr 	zzTmp
+	sbrc 	@2, 7
+	com 	zzTmp
+	add 	@1, @2
+	adc 	@0, zzTmp
+.ENDM
+
+; exchange register with ram value: reg, ram
+.MACRO EX 
+	lds 	zzTmp, @1
+	sts 	@1, @0
+	mov 	@0, zzTmp
+.ENDM	
+
+; exchange registers: reg1, reg2
+.MACRO EXR 
+	mov 	zzTmp, @1
+	mov 	@1, @0
+	mov 	@0, zzTmp
+.ENDM	
+
+; z80 push command high,low
+.MACRO zzPUSH
+	DEC2 	zzSPh, zzSPl
+	STRAM 	zzSPh, zzSPl, @0
+	DEC2 	zzSPh, zzSPl
+	STRAM 	zzSPh, zzSPl, @1
+.ENDM	
+
+; z80 push command high,low
+.MACRO zzPOP
+	LDRAM 	zzSPh, zzSPl, @1
+	INC2 	zzSPh, zzSPl
+	LDRAM 	zzSPh, zzSPl, @0
+	INC2 	zzSPh, zzSPl
+.ENDM	
+
+; z80 set memory var (@0) to value (@1)
+.MACRO zzSET
+	ldi 	zzTmp, @1
+	sts 	@0, zzTmp
+.ENDM	
+
+.MACRO 	zzCPx
+	sbr 	zzF, 1<<zzPF
+	LDRAM_NODDR zzH, zzL, FROMRAM0
+	@0 	zzH, zzL
+	DEC2 	zzB, zzC
+	cp	zzC, ZERO
+	cpc	zzB, ZERO
+	brne 	LBL_CPx_1		; P is set if BC!=0 now
+	cbr 	zzF, 1<<zzPF
+LBL_CPx_1:
+	cp	zzA, FROMRAM0
+.ENDM	
+
+.MACRO 	zzCPD
+	zzCPx 	DEC2
+.ENDM	
+
+.MACRO 	zzCPI
+	zzCPx 	INC2
+.ENDM	
+
+
+.MACRO 	zzLDx
+;	inc zzR
+	LDRAM 	zzH, zzL, zzTmp
+	STRAM 	zzD, zzE, zzTmp
+	@0 	zzH, zzL
+	@0 	zzD, zzE
+	DEC2 	zzB, zzC
+	cbr 	zzF, 1<<zzPF
+	cp	zzC, ZERO
+	cpc	zzB, ZERO
+	breq 	LBL_LDx_1
+	sbr 	zzF, 1<<zzPF
+	clz				; for LDIR command
+LBL_LDx_1:
+.ENDM	
+
+.MACRO	zzDAA
+;        pushw	Z
+	ldi 	Xh, high(DAATABLE)
+        mov	Xl, zzA
+
+        clr	zzTmp
+        sbrc	zzF, zzHF
+        sbr	zzTmp, 0x01
+       	sbrc	zzF, zzCF
+        sbr	zzTmp, 0x02
+        sbrc	zzF, zzNF
+        sbr	zzTmp, 0x04
+        add	Xh, zzTmp
+
+        ld	zzA, X			; new A
+        ldi	zzTmp, 0x08
+        add	Xh, zzTmp			
+        ld	zzF, X			; new Flags
+
+;	popw	Z
+.ENDM
+
+.MACRO	zzRRD
+	mov 	FROMRAM2,zzA
+	mov 	FROMRAM1,FROMRAM0
+	ldi 	zzTmp,0x0f
+	and 	FROMRAM1,zzTmp
+	and 	FROMRAM2,zzTmp
+	ldi 	zzTmp,0xf0
+	and 	zzA,zzTmp
+	and 	FROMRAM0,zzTmp
+	or 	zzA,FROMRAM1
+	or 	FROMRAM0,FROMRAM2
+	swap 	FROMRAM0
+	STRAM 	zzH,zzL,FROMRAM0
+	or	zzA, zzA
+.ENDM
+
+.MACRO  zzRLD
+	swap 	FROMRAM0
+	mov 	FROMRAM2,zzA
+	mov 	FROMRAM1,FROMRAM0
+	ldi 	zzTmp,0x0f
+	and 	FROMRAM1,zzTmp
+	and 	FROMRAM2,zzTmp
+	ldi 	zzTmp,0xf0
+	and 	zzA,zzTmp
+	and 	FROMRAM0,zzTmp
+	or 	zzA,	FROMRAM1
+	or 	FROMRAM0,FROMRAM2
+	STRAM 	zzH,zzL,FROMRAM0
+	or	zzA, zzA
+.ENDM
+
+.MACRO  SET_P_FLAG
+	; set P flag
+	ldi Xh,high(PFTABLE)
+	mov Xl,@0
+	ld zzTmp,X
+	or zzF,zzTmp
+.ENDM
+
+; mul: hl = hl*a & 0xffff, a = hl*a >> 16; Z if HL==0; C if A!=0
+.MACRO	zMUL
+	ldi	zzF, 0
+	ldi	zzTmp, 0
+	push	r0
+	push	r1
+	mul	zzL, zzA 		; r1:10 = l*a
+	add	zzH, r1			; h += r1
+	adc	zzTmp, zero		; tmp = (h+r1)>>8  - borrow
+	mov	zzL, r0			; l = r0 	- set result
+	mul	zzH, zzA		; r1:10 = h*a
+	add	zzTmp, r1		; tmp += r1	- borrow
+	mov	zzH, r0			; h = r0	- result
+	mov	zzA, zzTmp		; a = hl*a >> 16 - result
+	cpse	zzA, zero
+	ori	zzF, _C_		; set C if a!=0
+	mov	zzTmp, zzH
+	or	zzTmp, zzL
+	brne	m_not_zero	
+	ori	zzF, _Z_		; set Z if hl==0
+m_not_zero:
+	pop	r1
+	pop	r0
+.ENDM
+
+; div: hl = hl/a   a = hl % a    Z if HL==0;
+.MACRO	zDIV
+  ; div: r25:r24 / r23:r22  , r23:r22 - result   r25:r24 - reminder
+  ; uses r21 (zzTmp), r26, r27
+        push	r24
+        push	r25
+        push	r26
+        push	r27
+
+        mov	r25, zzH
+        mov	r24, zzL
+        mov	r23, zero
+        mov	r22, zzA
+
+        ; div sub starts here
+	sub	r26, r26
+	sub	r27, r27
+	ldi	r21, 0x11	; 17
+	rjmp	lbl_9e; .+14     	;  0x9e
+lbl_90:
+	adc	r26, r26
+	adc	r27, r27
+	cp	r26, r22
+	cpc	r27, r23
+	brcs	lbl_9e		; .+4      	;  0x9e
+	sub	r26, r22
+	sbc	r27, r23
+lbl_9e:
+	adc	r24, r24
+	adc	r25, r25
+	dec	r21
+	brne	lbl_90 		;.-22     	;  0x90
+	com	r24
+	com	r25
+	movw	r22, r24
+	movw	r24, r26
+	; div sub ends here
+
+	mov	zzH, r23
+	mov	zzL, r22		; result
+
+	mov	zzA, r24		; reminder
+
+	ldi	zzTmp, 0
+
+	cpse	zzA, zero
+	ori	zzF, _C_		; set C if a!=0
+
+	mov	zzTmp, zzH
+	or	zzTmp, zzL
+	brne	m_not_zero	
+	ori	zzF, _Z_		; set Z if hl==0
+m_not_zero:
+
+	pop	r27
+	pop	r26
+	pop	r25
+	pop	r24
+;	ret
+
+.ENDM
+
+.MACRO	zFLOAT
+	call	FLOAT_zCMD	
+.ENDM

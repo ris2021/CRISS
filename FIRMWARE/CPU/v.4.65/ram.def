@@ -1,0 +1,599 @@
+; -------------------------------- RAM ----------------------------
+
+.ORG	0x0100	
+; -------------------------------- VIDEOBUF ----------------------------
+
+VIDEOBUF:	.BYTE	0x7d0
+		; Ports processing vars
+.EQU		VIDEOBUF_END = VIDEOBUF + 25*80
+
+.ORG	0x08d0	
+CPDPORTSMAP:	.BYTE	0x8f4-0x8d0	; reserved for future
+
+; -------------------------------- PORTS ----------------------------
+
+.ORG	0x08f4
+PORTS_DATABLOCK:		; data for system port processinf
+
+PSVR_RQ:	.BYTE	1
+PSVR_AA:	.BYTE	1	; ports.inc - VIDEO module access ports block
+
+PVAR_RQ:	.BYTE	1
+PVAR_AA:	.BYTE	1	; ports.inc - sharable vars access
+
+PCAN_RQ:	.BYTE	1
+PCAN_AA:	.BYTE	1	; ports.inc - CAN module access ports block
+
+PLAN_RQ:	.BYTE	1
+PLAN_AA:	.BYTE	1	; ports.inc - LAN module access ports block
+
+PSPI_RQ:	.BYTE	1
+PSPI_AA:	.BYTE	1	; ports.inc - SPI module access ports block
+
+PCMD_FE:	.BYTE	1
+PCMD_FF:	.BYTE	1	; commands port
+
+; -------------------------------- Z80 REGISTERS ----------------------------
+
+.ORG	0x0900	
+zzI:	  	.BYTE 	1
+zzAe:	  	.BYTE 	1
+zzFe:	  	.BYTE 	1
+zzBe:	  	.BYTE 	1
+zzCe:	  	.BYTE 	1
+zzDe:	  	.BYTE 	1
+zzEe:		.BYTE 	1
+zzHe:		.BYTE 	1
+zzLe:		.BYTE 	1
+zzIFF1:		.BYTE 	1
+zzIFF2:		.BYTE 	1
+zzIM:		.BYTE 	1
+
+zzRhb:		.BYTE	1		; high bit of zzR
+zzRES:		.BYTE	1
+
+;15
+CDATA:		.BYTE	14		; parameters for BIOS, BDOS, PORTOUT calls
+
+; -------------------------------- BIOS VARS ----------------------------
+
+
+;CURSOR_X:	.BYTE	1               ; cursor X position, 1-80                  - moved to sharable
+;CURSOR_Y:	.BYTE	1               ; cursor Y position, 1-25                  - moved to sharable
+;CURSOR_STATUS:	.BYTE	1               ; =0 if cursor is on, 0x80 if is off       - moved to sharable
+
+;CRT_LINES:	.BYTE	1                                                          - moved to sharable
+;CRT_CODEPAGE:	.BYTE	1                                                          - moved to sharable
+
+;VIDEO_END:	.BYTE	2		; end of video ram starting from 0x100	   - moved to sharable
+;VIDEO_CURSOR:	.BYTE	2		; cursor position in videoram              - moved to sharable
+
+;BIOS_DISK:	.BYTE	1                                                          - moved to sharable
+;BIOS_TRACK:	.BYTE	2                                                          - moved to sharable
+;BIOS_SECTOR:	.BYTE	1                                                          - moved to sharable
+;BIOS_DMA:	.BYTE	2                                                          - moved to sharable
+
+CON_ESC:	.BYTE	1		; count chars in ESC-sequence
+CON_ESC_CHARS:	.BYTE	8		; esc-seq characters
+.EQU	CON_ESC_C1 = CON_ESC_CHARS
+.EQU	CON_ESC_C2 = CON_ESC_CHARS+1
+.EQU	CON_ESC_C3 = CON_ESC_CHARS+2
+.EQU	CON_ESC_C4 = CON_ESC_CHARS+3
+.EQU	CON_ESC_C5 = CON_ESC_CHARS+4
+.EQU	CON_ESC_C6 = CON_ESC_CHARS+5
+.EQU	CON_ESC_C7 = CON_ESC_CHARS+6
+.EQU	CON_ESC_C8 = CON_ESC_CHARS+7
+.EQU	CON_ESC_PAR = CON_ESC_C8	; parameter for aux use
+CON_CPPOS_X:	.BYTE	1		; previous cursor position
+CON_CPPOS_Y:	.BYTE	1		; previous cursor position
+
+CON_ATTR_XOR:	.BYTE	1		; attributes for xor
+CON_ATTR_OR:	.BYTE	1		; attributes for or
+
+;CON_WIN_X0:	.BYTE	1		; window to output - left 
+;CON_WIN_Y0:	.BYTE	1		; top
+;CON_WIN_X1:	.BYTE	1		; right
+;CON_WIN_Y1:	.BYTE	1		; bottom
+
+;CON_ESC_C1:	.BYTE	1		; count chars in ESC-sequence
+;CON_ESC_Cx:	.BYTE	1		; count chars in ESC-sequence
+
+;CON_IOBYTE:	.BYTE	1		; internal IOBYTE			- moved to sharable
+;INT_MASK:	.BYTE	1		; interrupt mask        		- moved to sharable
+
+SD_ADDRESS:	.BYTE	4               ; 512 bytes sectror address
+;SD_TYPE:	.BYTE	1 		; inseted SD-card type  		- moved to sharable
+SD_RSP:		.BYTE 	4		; sd card command response
+SD_LASTADDRESS:	.BYTE	4               ; 512 bytes sectror last accessed address
+
+;HW_DATA:	.BYTE	32		; misc data for hw compatibility layer  - moved to buffers
+					; decoding table are located in EPROM
+
+		; SVRAM control vars
+SV_DATABLOCK:
+SV_PTR:		.BYTE	2		; main datablock ram pointer
+SV_X1:		.BYTE	1               ; screen rect
+SV_Y1:		.BYTE	1
+SV_X2:		.BYTE	1
+SV_Y2:		.BYTE	1
+SV_DATA:	.BYTE	1               ; data
+SV_RES:		.BYTE	1
+SV_S_DATABLOCK:
+SV_S_PTR:	.BYTE	2		; secondary data block - ram pointer
+SV_S_X1:	.BYTE	1               ; screen rect
+SV_S_Y1:	.BYTE	1
+SV_S_X2:	.BYTE	1
+SV_S_Y2:	.BYTE	1
+SV_S_DATA:	.BYTE	1               ; data
+SV_S_RES:	.BYTE	1
+SV_DATA_PTR:	.BYTE	2		; data buffer ptr
+SV_DATABLOCK_END:
+
+		; Ethernet controller vars
+LAN_DATABLOCK:
+LAN_PAR:	.BYTE	2		; 0  settings
+LAN_MBUF_IN:	.BYTE	2		; 2  ram address to read from: address
+LAN_MBUF_IN_L:	.BYTE	2		; 4  ram address to read from: length
+LAN_MBUF_OUT:	.BYTE	2		; 6  ram address to write out: address
+LAN_MBUF_OUT_L:	.BYTE	2		; 8  ram address to write out: length
+LAN_IP_MY:	.BYTE	4		; 10
+LAN_IP_REMOTE:	.BYTE	4		; 14
+LAN_MAC_MY:	.BYTE	6		; 18
+LAN_MAC_REMOTE:	.BYTE	6		; 24
+LAN_BANK:	.BYTE	1		; 30 currently selected bank
+LAN_RXDPT:	.BYTE	2 		; 31 receive buffer current pointer
+LAN_RXSTATUS:	.BYTE	2		; 33 status from receive buffer
+LAN_UPD_DATA:	.BYTE	2		; 35 data to update registers	
+LAN_PORT_MY:	.BYTE	2		; 37 local port
+LAN_PORT_REMOTE:.BYTE	2		; 39 remote port
+LAN_PROTOCOL:	.BYTE	1		; 41 Protocol: 17=UDP, 6=TCP, ...
+LAN_MAIN_RQST:	.BYTE	1		; 42 flag that main server data is ready - must be cleared by program
+LAN_IP_ID:	.BYTE	2		; 43 IP fragment ID (autoincremented in BUILD_IP_FRAME)
+LAN_ECHO_CNTR:	.BYTE	1		; 45 echo counterfor ping responces
+LAN_MISC:	.BYTE	2		; 46 just reserved	
+LAN_USR_TCP_SN:	.BYTE	4		; 48 Sequence Number (SN)
+LAN_USR_TCP_ACK:.BYTE	4		; 52 Acknowledgment Number (ACK SN)
+		.EQU	LAN_USR_TCP_FLAGS = LAN_PAR ; TCP Flags
+		.EQU	LAN_USR_TCP_WINDOW = LAN_MISC ; TCP Window Size
+LAN_DATABLOCK_END:
+
+		; CAN controller vars
+CAN_DATABLOCK:
+CAN_MBUF_PAR:	.BYTE	2		; settings
+CAN_MBUF_IN:	.BYTE	2		; ram address to read from: address+length
+CAN_MBUF_IN_L:	.BYTE	1		; 
+CAN_MBUF_OUT:	.BYTE	2		; ram address to write out: address+length
+CAN_MBUF_OUT_L:	.BYTE	1		; 
+CAN_ID_MY:	.BYTE	4		; id_my: id10-3, <7-5>=id2-0 <3>=EID <1-0>=eid17-16, eid15-8, eid7-0
+CAN_ID_REMOTE:	.BYTE	4		; id_srv: id10-3, <7-5>=id2-0 <3>=EID <1-0>=eid17-16, eid15-8, eid7-0
+CAN_MODE:	.BYTE	1		; currently selected mode: standard, extended
+CAN_BT_SSEG:	.BYTE	1		; timing: sysncseg, propseg, phaseseg1, phaseseg2
+CAN_BT_PSEG:	.BYTE	1
+CAN_BT_PS1:	.BYTE	1
+CAN_BT_PS2:	.BYTE	1
+CAN_BT_SJW:	.BYTE	1		; sync jump width
+CAN_BT_BRP:	.BYTE	1		; bitrate prescaler
+CAN_DATA_BUF:	.BYTE	8		; received, data for send
+CAN_MSG_HDR:	.BYTE	4		; received message header	
+CAN_DATABLOCK_END:
+
+_DUMMY:		.BYTE	1		; just for correct END
+
+;IRQ_CPD_FLAG:	.BYTE	1		; IRQ_CPD_FLAG stored afer reading
+
+PORT_FF_CCMD:	.BYTE	1		; port ff control command
+
+CAD_CMD_FLAG:	.BYTE	1		; CAD command
+CAD_CMD_PIN:	.BYTE	2		; pin from input
+
+IRQ_CMD:	.BYTE	1		; IRQ handler internal var
+
+;GLAN_BUF:	.BYTE	2		; address of BUF
+;GLAN_LEN:	.BYTE	2		; len for send/receive operations
+;GLAN_REMOTE:	.BYTE	2		; address of remote server parameters
+;GLAN_MYPORT:	.BYTE	2		; my port value
+
+; -------------------------------- PRELOAD DATA ------------------------------
+
+.ORG	0x0a00	
+
+; z80 emulator technical data
+RAMOPCODES:
+#include "z80/z80_asm_dseg.asm"		; 7*2*256	; OPCODES jumps
+PFTABLE: 	.BYTE 	256             ; P flag
+FA2ZTABLE: 	.BYTE 	256             ; E to Z80 flag translation
+FZ2ATABLE: 	.BYTE 	256             ; Z80 to E flag translation
+DAATABLE:	.BYTE 	4096		; DAA 4096 bytes table
+RAMOPCODESEND:
+
+IRQOPCODES:	
+IRQOPCODES_L:	.BYTE	256		; IRQ proc address table
+IRQOPCODES_H:	.BYTE	256		; IRQ proc address table
+IRQOPCODESEND:
+
+		.BYTE	256		; reserved
+
+; -------------------------------- BUFFERS -------------------------------------
+.ORG 0x3000
+
+SD_BUF:		.BYTE 	512		; SD-card rw buffer
+SD_BUF_END:
+
+.EQU		LAN_BUF_SIZE = 512+256	; LAN access buffer 512 bytes max packet size
+LAN_BUF:	.BYTE 	LAN_BUF_SIZE
+.EQU		LAN_ETH_FRAME = LAN_BUF
+.EQU		LAN_ETH_DSTMAC = LAN_ETH_FRAME
+.EQU		LAN_ETH_SRCMAC = LAN_ETH_FRAME+6
+.EQU		LAN_ETH_TYPE = LAN_ETH_FRAME+12
+.EQU		LAN_ETH_DATA = LAN_ETH_FRAME+14
+
+.EQU		LAN_IP_FRAME = LAN_ETH_DATA
+.EQU		LAN_IP_VERS = LAN_IP_FRAME
+.EQU		LAN_IP_TOS = LAN_IP_FRAME+1
+.EQU		LAN_IP_LEN = LAN_IP_FRAME+2
+.EQU		LAN_IP_FRAG = LAN_IP_FRAME+4
+.EQU		LAN_IP_FLAGS = LAN_IP_FRAME+6
+.EQU		LAN_IP_LIFE = LAN_IP_FRAME+8
+.EQU		LAN_IP_PROTOCOL = LAN_IP_FRAME+9
+.EQU		LAN_IP_CS = LAN_IP_FRAME+10
+.EQU		LAN_IP_SRCIP = LAN_IP_FRAME+12
+.EQU		LAN_IP_DSTIP = LAN_IP_FRAME+16
+.EQU		LAN_IP_DATA = LAN_IP_FRAME+20
+
+.EQU		LAN_UDP_FRAME = LAN_IP_DATA
+.EQU		LAN_UDP_SRCPORT = LAN_IP_DATA
+.EQU		LAN_UDP_DSTPORT = LAN_IP_DATA+2
+.EQU		LAN_UDP_LEN = LAN_IP_DATA+4
+.EQU		LAN_UDP_CS = LAN_IP_DATA+6
+.EQU		LAN_UDP_DATA = LAN_IP_DATA+8
+
+.EQU		LAN_UDP_PH_LEN = LAN_UDP_FRAME-2
+.EQU		LAN_UDP_PH_PROTOCOL = LAN_UDP_FRAME-3
+.EQU		LAN_UDP_PH_Z = LAN_UDP_FRAME-4
+.EQU		LAN_UDP_PH_DSTIP = LAN_UDP_FRAME-8
+.EQU		LAN_UDP_PH_SRCIP = LAN_UDP_FRAME-12
+.EQU		LAN_UDP_PH_START = LAN_UDP_FRAME-12
+
+.EQU		LAN_ARP_FRAME = LAN_ETH_DATA
+.EQU		LAN_ARP_HWTYPE = LAN_ARP_FRAME
+.EQU		LAN_ARP_PROTOTYPE = LAN_ARP_FRAME+2
+.EQU		LAN_ARP_MACLEN = LAN_ARP_FRAME+4
+.EQU		LAN_ARP_IPLEN = LAN_ARP_FRAME+5
+.EQU		LAN_ARP_MSGTYPE = LAN_ARP_FRAME+6
+.EQU		LAN_ARP_SRCMAC = LAN_ARP_FRAME+8
+.EQU		LAN_ARP_SRCIP = LAN_ARP_FRAME+14
+.EQU		LAN_ARP_DSTMAC = LAN_ARP_FRAME+18
+.EQU		LAN_ARP_DSTIP = LAN_ARP_FRAME+24
+
+.EQU		LAN_ICMP_FRAME = LAN_IP_DATA
+.EQU		LAN_ICMP_TYPE = LAN_ICMP_FRAME
+.EQU		LAN_ICMP_CODE = LAN_ICMP_FRAME+1
+.EQU		LAN_ICMP_CS = LAN_ICMP_FRAME+2
+.EQU		LAN_ICMP_ROH = LAN_ICMP_FRAME+4
+.EQU		LAN_ICMP_DATA = LAN_ICMP_FRAME+8
+
+.EQU		LAN_TCP_FRAME = LAN_IP_DATA
+.EQU		LAN_TCP_SRCPORT = LAN_TCP_FRAME
+.EQU		LAN_TCP_DSTPORT = LAN_TCP_FRAME+2
+.EQU		LAN_TCP_SN = LAN_TCP_FRAME+4
+.EQU		LAN_TCP_ACK = LAN_TCP_FRAME+8
+.EQU		LAN_TCP_OFFSET = LAN_TCP_FRAME+12
+.EQU		LAN_TCP_FLAGS = LAN_TCP_FRAME+13
+.EQU		LAN_TCP_WSIZE = LAN_TCP_FRAME+14
+.EQU		LAN_TCP_CS = LAN_TCP_FRAME+16
+.EQU		LAN_TCP_URG = LAN_TCP_FRAME+18
+.EQU		LAN_TCP_DATA = LAN_TCP_FRAME+20
+
+.EQU		LAN_TCP_PH_LEN = LAN_TCP_FRAME-2
+.EQU		LAN_TCPP_PH_PROTOCOL = LAN_TCP_FRAME-3
+.EQU		LAN_TCP_PH_Z = LAN_TCP_FRAME-4
+.EQU		LAN_TCP_PH_DSTIP = LAN_TCP_FRAME-8
+.EQU		LAN_TCP_PH_SRCIP = LAN_TCP_FRAME-12
+.EQU		LAN_TCP_PH_START = LAN_TCP_FRAME-12
+
+LAN_BUF_END:
+
+
+.EQU		LAN2_BUF_SIZE = 256
+LAN2_BUF:	.BYTE	LAN2_BUF_SIZE			; reserve for internal LAN operations <128b data
+LAN2_BUF_END:
+
+
+.EQU		LAN3_BUF_SIZE = 64
+LAN3_BUF:
+LAN3_BUF_HDR:	.BYTE	LAN3_BUF_SIZE			; SYSTEM BUFFER: getting HEADER data
+
+
+LAN_OP_HDR:	.BYTE	48				; settings for the current operation
+.EQU		LAN_OP_SRC_MAC  = LAN_OP_HDR
+.EQU		LAN_OP_SRC_IP   = LAN_OP_HDR+6
+.EQU		LAN_OP_SRC_PORT = LAN_OP_HDR+10
+.EQU		LAN_OP_DST_MAC  = LAN_OP_HDR+12
+.EQU		LAN_OP_DST_IP   = LAN_OP_HDR+18
+.EQU		LAN_OP_DST_PORT = LAN_OP_HDR+22
+.EQU		LAN_OP_BUF      = LAN_OP_HDR+24
+.EQU		LAN_OP_BUF_LEN  = LAN_OP_HDR+26
+.EQU		LAN_OP_BUF_SIZE = LAN_OP_HDR+28		; Buffer size
+.EQU		LAN_OP_PROTOCOL = LAN_OP_HDR+30		; PROTOCOL
+.EQU		LAN_OP_RXDPT    = LAN_OP_HDR+21		; RXDPT after OP
+.EQU		LAN_OP_TYPE     = LAN_OP_HDR+23		; message type (used in ICMP)
+.EQU		LAN_OP_ETHTYPE  = LAN_OP_HDR+24		; EtherType
+.EQU		LAN_OP_RESERVE  = LAN_OP_HDR+25		; 16 bytes reserve
+
+
+_RTC_BUF:	.BYTE	32				; RTC data
+
+RTC_RAM:	.BYTE	96				; RTC RAM data
+
+;+0
+.EQU		RTC_HW = RTC_RAM			; default hw setting
+.EQU		RTC_IOBYTE = RTC_RAM+1			; default CRISS iobyte
+
+;+2
+.EQU		RTC_LAN_BASE = RTC_RAM+2
+.EQU		RTC_LAN_MY_MAC = RTC_LAN_BASE
+.EQU		RTC_LAN_MY_IP = RTC_LAN_BASE+6
+.EQU		RTC_LAN_GATE = RTC_LAN_BASE+10
+.EQU		RTC_LAN_MASK = RTC_LAN_BASE+14
+.EQU		RTC_LAN_MTU = RTC_LAN_BASE+18
+
+;+22
+.EQU		RTC_SRV_BASE = RTC_RAM+22
+.EQU		RTC_SRV_MAC = RTC_SRV_BASE
+.EQU		RTC_SRV_IP = RTC_SRV_BASE+6
+.EQU		RTC_SRV_PORT = RTC_SRV_BASE+10
+
+;+34
+.EQU		RTC_PNC_BASE = RTC_RAM+34
+.EQU		RTC_PNC_MAC = RTC_PNC_BASE
+.EQU		RTC_PNC_IP = RTC_PNC_BASE+6
+.EQU		RTC_PNC_PORT = RTC_PNC_BASE+10
+
+;+46
+.EQU		RTC_COMM_BASE = RTC_RAM+46
+.EQU		RTC_MODBUS_ID = RTC_COMM_BASE
+.EQU		RTC_CAN_ID = RTC_COMM_BASE+1
+
+;+48
+.EQU		RTC_HW_DISABLE = RTC_RAM+48		; hardware disabled
+
+;+49
+.EQU		RTC_AUTO = RTC_RAM+49			; auto options: clock on the screeen etc
+
+;+50
+.EQU		RTC_PR_IOBYTE = RTC_RAM+50		; default PUNCH device: TTY, LAN, CAN, ...
+
+;+51
+.EQU		RTC_TMS_BASE = RTC_RAM+51		; time server
+.EQU		RTC_TMS_MAC = RTC_TMS_BASE
+.EQU		RTC_TMS_IP = RTC_TMS_BASE+6
+.EQU		RTC_TMS_PORT = RTC_TMS_BASE+10
+
+;+63
+.EQU		RTC_IRQ_BASE = RTC_RAM+63
+.EQU		RTC_IRQ_V_KBD = RTC_IRQ_BASE
+.EQU		RTC_IRQ_V_GPO = RTC_IRQ_BASE+1
+.EQU		RTC_IRQ_V_CTC = RTC_IRQ_BASE+2
+.EQU		RTC_IRQ_V_MUS = RTC_IRQ_BASE+3
+.EQU		RTC_IRQ_V_R1  = RTC_IRQ_BASE+4
+.EQU		RTC_IRQ_V_R2  = RTC_IRQ_BASE+5
+.EQU		RTC_IRQ_V_CTX = RTC_IRQ_BASE+6
+.EQU		RTC_IRQ_V_CRX = RTC_IRQ_BASE+7
+
+.EQU		RTC_IRQ_V_LAN = RTC_IRQ_BASE+8
+.EQU		RTC_IRQ_V_CAN = RTC_IRQ_BASE+9
+.EQU		RTC_IRQ_V_RTC = RTC_IRQ_BASE+10
+.EQU		RTC_IRQ_V_R3  = RTC_IRQ_BASE+11
+.EQU		RTC_IRQ_V_R4  = RTC_IRQ_BASE+12
+.EQU		RTC_IRQ_V_R5  = RTC_IRQ_BASE+13
+.EQU		RTC_IRQ_V_TTX = RTC_IRQ_BASE+14
+.EQU		RTC_IRQ_V_TRX = RTC_IRQ_BASE+15
+
+;+79
+
+;+80
+.EQU		RTC_SEC_BASE = RTC_RAM+80
+.EQU		RTC_SEC_PIN = RTC_SEC_BASE		; 2 bytes (5 digit) pin-code
+.EQU		RTC_CAD_PIN = RTC_SEC_BASE+2		; 2 bytes (5 digit) pin-code
+
+;+84
+.EQU		RTC_DEV_IOBYTE = RTC_RAM+84		; default LST device: TTY, LAN, CAN, ...
+
+;+85
+.EQU		RTC_PRN_PORT = RTC_RAM+85		; port for the printer server
+.EQU		RTC_SDC_PORT = RTC_RAM+87		; port for the SDC server
+
+;+89
+
+;+90
+.EQU		RTC_DEVID = RTC_RAM+90			; 6 byte device id
+
+		; SPI direct access buffer
+.EQU		PSPI_BUF_MAXLEN	= 134
+PSPI_BUF:	.BYTE	PSPI_BUF_MAXLEN	; SPI buffer data
+.EQU		PSPI_ADDR = PSPI_BUF
+.EQU		PSPI_SPEED = PSPI_BUF+1
+.EQU		PSPI_BUF_DATA = PSPI_BUF+2
+
+		; EEPROM access shares SPI buffer
+.EQU		ROM_BUF_ADDR_ROM = PSPI_BUF
+.EQU		ROM_BUF_ADDR_RAM = PSPI_BUF+2
+.EQU		ROM_BUF_ADDR_LENGTH = PSPI_BUF+2
+
+
+HW_DATA:	.BYTE	32		; misc data for hw compatibility layer
+					; decoding table are located in EPROM
+
+.EQU 		PR_BUF_LEN = 32
+PR_BUF_CNT:	.BYTE	1		; input buffer for punch/reder channel
+PR_BUF:		.BYTE	PR_BUF_LEN
+
+.EQU 		CON_BUF_LEN = 32
+CON_BUF_CNT:	.BYTE	1		; input buffer for CON channel
+CON_BUF:	.BYTE	CON_BUF_LEN
+
+
+; -------------------------------- SHARABLE VARS -------------------------------------
+
+.ORG 0x3F00
+
+		; sharable vars
+.EQU		SHARABLE_MAXLEN	= 254
+SHARABLE:
+
+;0
+HW_FLAG:	.BYTE	1 		; settings for HW compat layer
+;1
+CON_IOBYTE:	.BYTE	1		; internal IOBYTE
+;2
+HW_FOUND:	.BYTE	1		; installed hardware
+;3
+INT_MASK:	.BYTE	2		; interrupt mask
+
+;5
+CRT_SETTINGS:	.BYTE	1		; srolling (bit 7)
+					; use attr (bit 6) 
+					;!!!! todo wrap (bit 5)
+					; (bit 4)
+					;!!! todo  windowed mode (bit 3)
+					; codepage (bits 0-2)
+
+;6
+CURSOR_X:	.BYTE	1               ; cursor X position, 1-80
+CURSOR_Y:	.BYTE	1               ; cursor Y position, 1-25
+CURSOR_STATUS:	.BYTE	1               ; =0 if cursor is on, 0x80 if is off
+
+;9
+CRT_LINES:	.BYTE	1		; lines on the screen
+CRT_CHARS:	.BYTE	1		; chars per line
+
+;11
+VIDEO_END:	.BYTE	2		; end of video ram starting from 0x100	
+VIDEO_CURSOR:	.BYTE	2		; cursor position in videoram
+
+;15
+BIOS_DISK:	.BYTE	1
+BIOS_TRACK:	.BYTE	2
+BIOS_SECTOR:	.BYTE	1
+BIOS_DMA:	.BYTE	2
+
+;21
+SD_TYPE:	.BYTE	1 		; inseted SD-card type
+
+;22
+CON_LAST_CHAR:	.BYTE	1		; last read char
+CON_LAST_MODK:	.BYTE	1		; last read char
+CON_LAST_KACT:	.BYTE	1		; last read char
+
+;25
+LST_LAST_CHAR:	.BYTE	1		; last received char from LST
+
+;26
+SD_FDD_BASE:	.BYTE	16		; base for the selected discs image on SD: A,B,...,P
+
+;42
+SYS_NOTIFY:	.BYTE	1		; debug options
+DBG_OPTIONS:	.BYTE	1		; debug options
+DBG_BREAK:	.BYTE	2		; debug options
+
+;46
+BIOS_LAST_CALL:	.BYTE	1		; last bios call
+
+;47
+SD_CCS:		.BYTE	1		; for CCS flag from CMD58 response
+SD_ERROR:	.BYTE	1		; result of the last operation
+
+;49
+DBG_CODE:	.BYTE	1		; data to output
+DBG_DATA:	.BYTE	1		; data to output
+
+;51
+FLIB_CMD:	.BYTE	1		; float operation command
+FLIB_DATA:	.BYTE	4*3		; float operation 3 4-byte values
+		.EQU	FLOATDATA1 = FLIB_DATA+0
+		.EQU	FLOATDATA2 = FLIB_DATA+4
+		.EQU	FLOATDATA3 = FLIB_DATA+8
+
+;64
+BDOS_LAST_CALL:	.BYTE	1		; last bdos call
+
+;65
+RTC_SECS:	.BYTE	1		; RTC data buffer
+RTC_MINS:	.BYTE	1
+RTC_HOURS:	.BYTE	1
+RTC_DAY:	.BYTE	1
+RTC_DATE:	.BYTE	1
+RTC_MONTH:	.BYTE	1
+RTC_YEAR:	.BYTE	1
+		.EQU	RTC_SBUF = RTC_SECS
+
+;72
+PR_IOBYTE:	.BYTE	1		; iobyte for punch/reader bios command
+
+;73
+HW_DISABLE:	.BYTE	1		; hardware disabled
+
+;74
+PR_SRV_MAC:	.BYTE	6
+PR_SRV_IP:	.BYTE	4
+PR_SRV_PORT:	.BYTE	2		; settings for punch/reader server
+
+;86
+TMR_10MS:	.BYTE	1		; 10 ms timer ticks
+
+;87
+;SD_IOBYTE:	.BYTE	1		; SD channel no
+RES_IOBYTE:	.BYTE	1		; SD channel no
+;88
+;LST_IOBYTE:	.BYTE	1		; LST channel no
+DEV_IOBYTE:	.BYTE	1		; LST channel no
+
+;89
+MOUSE_SETTINGS:
+MS_MODE:	.BYTE	1		; Mouse settings for auto mode
+MS_STEP_X:	.BYTE	1
+MS_STEP_Y:	.BYTE	1
+MS_MOVE_UP:	.BYTE	1		; shift up returns this character
+MS_MOVE_DOWN:	.BYTE	1
+MS_MOVE_RIGHT:	.BYTE	1
+MS_MOVE_LEFT:	.BYTE	1
+MS_BTN_LEFT_P:	.BYTE	1		; left button returns character
+MS_BTN_LEFT_U:	.BYTE	1		; left button returns character
+MS_BTN_MID_P:	.BYTE	1		; mid button returns character
+MS_BTN_MID_U:	.BYTE	1		; mid button returns character
+MS_BTN_RIGHT_P:	.BYTE	1		; right button returns character
+MS_BTN_RIGHT_U:	.BYTE	1		; right button returns character
+
+;102
+CON_WIN_X0:	.BYTE	1		; window to output - left 
+CON_WIN_Y0:	.BYTE	1		; top
+CON_WIN_X1:	.BYTE	1		; right
+CON_WIN_Y1:	.BYTE	1		; bottom
+CON_WIN_CUR_X:	.BYTE	1		; cursor X
+CON_WIN_CUR_Y:	.BYTE	1		; cursor Y
+
+;108
+;CRT_WIN_X0:	.BYTE	1		; windowed output - left 
+;CRT_WIN_Y0:	.BYTE	1		; top
+;CRT_WIN_X1:	.BYTE	1		; right
+;CRT_WIN_Y1:	.BYTE	1		; bottom
+
+;106
+
+;128	- USERS area
+
+
+;254
+SHARABLE_END:	.BYTE	SHARABLE_MAXLEN	- (SHARABLE_END-SHARABLE)
+
+.ORG 0x4000
+FLOATSPH:	.BYTE	1
+FLOATSPL:	.BYTE	1
+FLOATSREG:	.BYTE	1
+FLOATDATA:	.BYTE	125
+FLOATSTACK:
+
+; stack data - reserved! --------------------------------------------------------
+.ORG 0x4080
+
+STACK:		.BYTE 	128

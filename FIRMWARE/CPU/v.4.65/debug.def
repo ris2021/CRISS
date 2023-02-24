@@ -1,0 +1,73 @@
+.MACRO uDBGu
+	call	UART1_SEND
+.ENDM
+
+.MACRO uDBGr
+	mov	temp, @0
+	call	UART1_SEND
+.ENDM
+
+.MACRO uDBGc
+	ldi	temp, @0
+	call	UART1_SEND
+.ENDM
+
+.MACRO uDBGcr
+	uDBGc 	13
+.ENDM	
+
+.MACRO uDBGh
+	mov	temp, @0
+	call	UART1_HEXOUT
+.ENDM
+
+.MACRO uDBGh_temp
+	pop	temp
+	push	temp
+	call	UART1_HEXOUT
+.ENDM
+
+
+.MACRO uDBGm
+	lds	temp, @0
+	call	UART1_HEXOUT
+.ENDM
+
+.MACRO uDBGw
+	mov	temp, @0
+	call	UART1_HEXOUT
+	mov	temp, @1
+	call	UART1_HEXOUT
+.ENDM
+
+.MACRO uDBGa
+	mov	temp, @0
+	call	UART1_HEXOUT
+	mov	temp, @1
+	call	UART1_HEXOUT
+	uDBGc	':'
+.ENDM
+
+	; debug zRAM cell
+.MACRO uDBGz
+	ldiw	Z, @0
+	call	DBG_ZRAM
+.ENDM
+
+
+.MACRO NOTIFY
+	push	temp
+	lds	temp, SYS_NOTIFY	
+	sbrc	temp, @0
+	call	@1
+	pop	temp
+.ENDM
+
+.MACRO NOTIFYt
+	sts	DBG_DATA, temp
+	push	temp
+	ldi	temp, @1
+	sts	DBG_CODE, temp
+	pop	temp
+	NOTIFY	@0, DBG_TEMP
+.ENDM

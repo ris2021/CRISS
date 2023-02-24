@@ -1,0 +1,71 @@
+.MACRO	STR_GOTOXY
+	ldi   	YH, high(0xf800+((@1)-1)*80+((@0)-1))
+    	ldi   	YL, low(0xf800+((@1)-1)*80+((@0)-1))
+.ENDM
+
+.MACRO 	puts
+	ldi	zh, high((@0)*2)    
+	ldi	zl, low((@0)*2)
+	call	DO_PUTS
+.ENDM
+
+.MACRO 	con_puts
+	ldi	zh, high((@0)*2)    
+	ldi	zl, low((@0)*2)
+	call	STR_OUT
+.ENDM
+
+.MACRO	con_putc
+	ldi   	temp, @0
+	mov	zzC, temp
+	ldi	temp, 0x04
+	call  	BIOS_CMD
+.ENDM
+
+.MACRO	tcall
+        pushw	Z
+        pushw	X
+        ldi	ZL, low((@0)*2)
+        ldi	ZH, high((@0)*2)
+        add	ZL, @1
+        adc	ZH, zero
+        add	ZL, @1
+        adc	ZH, zero
+	lpm	XL, Z+
+	lpm	XH, Z
+	mov	ZL, XL
+	mov	ZH, XH
+        icall
+	popw	X
+	popw	Z
+.ENDM
+
+.MACRO 	con_puts_ram
+	ldi	zh, high(@0)    
+	ldi	zl, low(@0)
+	call	STR_OUT_RAM
+.ENDM
+
+
+; move @2 bytes from @0 to @1 backward
+.MACRO	ZXYb
+	ldiw	Z, @0
+	ldiw	Y, @2
+	ldiw	X, @1
+	call	LAN_ZXYb
+.ENDM
+
+; move @2 bytes from @0 to @1 froward
+.MACRO	ZXYf
+	ldiw	Z, @0
+	ldiw	Y, @2
+	ldiw	X, @1
+	call	LAN_ZXYf
+.ENDM
+
+; move @1 bytes from Z to @0 froward
+.MACRO	ZXYf_Z
+	ldiw	Y, @1
+	ldiw	X, @0
+	call	LAN_ZXYf
+.ENDM
