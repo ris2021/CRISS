@@ -1,0 +1,10 @@
+.DSEG
+.ORG	0x100
+video:		.BYTE	24*80	; video ram 2000 bytes - main screen
+video25:	.BYTE	80	; 25th line
+
+;.ORG	0x100+25*80
+vstat:		.BYTE	1
+video_cp:	.BYTE	25
+
+STACK:		.BYTE	22
