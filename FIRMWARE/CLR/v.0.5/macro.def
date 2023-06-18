@@ -1,0 +1,98 @@
+.MACRO	tcblo
+	cpi	temp, @0
+	brsh	_tcbeno
+	rjmp	@1
+_tcbeno:
+.ENDM
+
+.MACRO	nop10
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+.ENDM
+
+.MACRO	WAIT_TIMER
+_ml_wait_orb:
+        in	temp, TIFR0
+	sbrc	temp, @0	; OCF0B	; check RTR flag
+	rjmp	_ml_wait_orb	; wait for RTR flag clearance
+.ENDM
+
+.MACRO	SPI_START
+	out 	USIDR, temp
+	ldi 	temp2, (1<<USIOIF)
+	out 	USISR, temp2	; clear overflow flag
+
+	ldi 	temp2, (1<<USIWM0)|(1<<USICS1)
+	out 	USICR, temp2
+	sbi	DDRA, PA5	; MISO pin to out
+;	out	DDRA, temp
+;	ret
+.ENDM
+
+.MACRO	SPI_STOP
+;	ldi 	r16, (1<<USIWM0)|(1<<USICS1)
+	cbi	DDRA, PA5	; MISO pin to in
+	out 	USICR, zero
+;	ldi	r16, (1<<PA0)|(1<<PA1)|(1<<PA2)
+;	out	DDRA, r16
+;	ret
+.ENDM
+
+	; SPI slave receive byte
+.MACRO	SPI
+SlaveSPITransfer:
+;	out 	USIDR, temp
+;	ldi 	temp, (1<<USIOIF)
+;	out 	USISR, temp
+SlaveSPITransfer_loop:
+	in 	temp, USISR
+	sbrs 	temp, USIOIF
+	rjmp 	SlaveSPITransfer_loop
+	in 	temp, USIDR
+;	ret
+.ENDM
+
+.MACRO	FILL_LINE_Z	
+	ldi	temp, 0xF8	; 16 chars block
+	or	temp, defclr
+	st	Z+, temp
+	st	Z+, temp
+	st	Z+, temp
+	st	Z+, temp
+	st	Z+, temp
+	adiw	Z, N_BLOCKS-5
+;	st	Z+, temp
+;	st	Z+, temp
+;	st	Z+, temp
+;	st	Z+, temp
+;	st	Z+, temp
+;	st	Z+, temp
+;	st	Z+, temp
+;	st	Z+, temp
+;	st	Z+, temp
+;	st	Z+, temp
+;	st	Z+, temp
+;	st	Z+, temp
+;	st	Z+, temp
+;	st	Z+, temp
+;	st	Z+, temp	; fill line with default color
+;	ret
+.ENDM
+
+
+.MACRO	PT_GET_LEN
+	cbr	@0, 0x80
+	lsr	@0
+	lsr	@0
+	lsr	@0
+	inc	@0		; block length
+.ENDM
+
