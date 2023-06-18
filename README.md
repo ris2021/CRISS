@@ -18,10 +18,10 @@ Amazing functionality for the DIY device: it is not a toy, it is REAL Computer, 
 <li> OS: CP/M 2.2 = programming languages, text processors, games, business software, etc.
 <li> Instructions: Z80 (Zilog), extended with MUL, DIV, and floating-point, control time 1us LD r,r ops
 <li> Memory: 64Kb SRAM, 128 Kb EPROM
-<li> Video: VGA (!), monochrome, up to 25x80 chars, 5 symbol sets, graphics 160x96 px
+<li> Video: VGA (!), 8 colors, up to 25x80 chars, 5 symbol sets, graphics 160x96 px
 <li> Storage: SD-card
 <li> Keyboard: standard PS/2 + PS/2 mouse
-<li> Printer: YES, serial or LPT
+<li> Printer: serial or LPT
 <li> Interfaces: RS-232, UART, Ethernet, GPIO, CAN (option)
 <li> Real time clock with battery
 <li> Single-tone melody generator with built-in speaker
@@ -50,5 +50,6 @@ CRISS CP/M computer contains 4 AVR MCU: 2 (ATTINY13 + ATMEGA328P) are for genera
   <tr><td>VGA controller - chars generator</td><td>VGA-M328P</td><td>ATMEGA328P</td><td>BOOTLOADERS/VGA</td><td>FIRMWARE/VGA<br>FIRMWARE/VGA-FONTS</td><td></td></tr>
   <tr><td>Pripheral controller</td><td>CPD</td><td>ATMEGA328P</td><td>BOOTLOADERS/CPD</td><td>FIRMWARE/CPD</td><td></td></tr>
   <tr><td>Main CPU</td><td>CPU</td><td>ATMEGA1284P</td><td>BOOTLOADERS/CPU</td><td>FIRMWARE/CPU</td><td></td></tr>
+  <tr><td>VGA Coloring</td><td>CLR</td><td>ATTINY84</td><td>BOOTLOADERS/CLR</td><td>FIRMWARE/CLR</td><td></td></tr>
 </table>  
 
