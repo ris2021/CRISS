@@ -4,7 +4,11 @@ The first DIY full-featured computer supporting VGA, Mouse, Pronter, Ethernet, R
 
 <img src=criss_bw_draw.png>
 
-CRISS is a 21st-century CP/M single-board computer based mainly on AVR microcontrollers. The CPU is a 20 MHz ATMEGA1284P, which imitates a 4 MHz Z80 through machine-code emulation. A pair of ATMEGA328s run the peripheral controller and a VGA output, so the CRISS can be used with modern monitors. True to its heritage however, the image is monochrome green-on-black, looking instantly familiar to users of Kaypro's, Osborne's and other contemporary CP/M machines.
+CRISS is a 21st-century CP/M single-board computer based mainly on AVR microcontrollers. The CPU is a 20 MHz ATMEGA1284P, which imitates a 4 MHz Z80 through machine-code emulation. A pair of ATMEGA328s run the peripheral controller and a VGA output, so the CRISS can be used with modern monitors. Basically image is monochrome green-on-black, looking instantly familiar to users of Kaypro's, Osborne's and other contemporary CP/M machines.
+
+Started from May 2023 color support was added by additional MCU ATTiny84, now CRISS CP/M supports VGA output with 8 text colors!
+
+<img src=DSC_0246_HD.jpg width=70%>
 
 Software is loaded through an SD card that holds floppy images. The CRISS can directly run programs written for the Kaypro II and Robotron 1715 computers, although other platforms can be supported as well with a software upgrade. 
 
