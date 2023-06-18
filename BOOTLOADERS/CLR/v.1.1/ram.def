@@ -1,0 +1,7 @@
+; CPD RAM definitions
+.DSEG
+.ORG	0x060
+
+prg_buf:
+	.BYTE	64
+

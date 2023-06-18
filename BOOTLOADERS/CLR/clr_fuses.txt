@@ -1,0 +1,9 @@
+Ext = 0xFE
+High = 0xD4
+Low = 0xE0
+
+Brown-out at 4,3v
+SPI Enabled
+Preserve EEPROM from Chip Erase
+Selfprog Enabled
+Ext Clock 65ms
