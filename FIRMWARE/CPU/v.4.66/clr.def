@@ -1,0 +1,35 @@
+; temp - cmd code, zzC - parameter
+.EQU 	CLR_CMD_DEFAULT 	= 0 ; set default mode/color
+.EQU 	CLR_CMD_USER_COLOR 	= 1 ; 1 - set user static color
+.EQU 	CLR_CMD_PATTERN 	= 2 ; 2 - pattern command
+.EQU 	CLR_CMD_SET_X 		= 3 ; 3 - set X
+.EQU 	CLR_CMD_SET_Y 		= 4 ; 4 - set Y
+.EQU 	CLR_CMD_CLEAR_LINE 	= 5 ; 5 - clear line
+.EQU 	CLR_CMD_CLEAR_SCREEN 	= 6 ; 6 - cler screen
+.EQU 	CLR_CMD_SCROLL 		= 7 ; 7 - scroll
+.EQU 	CLR_CMD_GOTO_PATTERN 	= 8 ; 8 - goto pattern mode
+.EQU 	CLR_CMD_RAW 		= 0xff ; 0xff - raw command
+
+
+.EQU 	CLR_CLR_BLACK 		= 0 ; 
+.EQU 	CLR_CLR_RED 		= 1 ; 
+.EQU 	CLR_CLR_GREEN 		= 2 ; 
+.EQU 	CLR_CLR_YELLOW 		= 3 ; 
+.EQU 	CLR_CLR_BLUE 		= 4 ; 
+.EQU 	CLR_CLR_MAGENTA		= 5 ; 
+.EQU 	CLR_CLR_CYAN 		= 6 ; 
+.EQU 	CLR_CLR_WHITE 		= 7 ; 
+
+; colors:
+; 1 - red
+; 2 - green
+; 3 - yellow
+; 4 - blue
+; 5 - magenta
+; 6 - cyan
+; 7 - white
+
+.MACRO	EXEC_CLR_CMD
+	ldi	temp, @0
+	call	CLR_CMD
+.ENDM

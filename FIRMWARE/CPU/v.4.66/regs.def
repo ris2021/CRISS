@@ -1,0 +1,49 @@
+; var definition
+
+
+	.DEF	SPIMODE = r0 ; ctrl port SPI mode
+	.DEF	FF      = r2 ;=0xff
+	.DEF	RAMOE   = r3 ; ctrl port RAM OE
+	.DEF	RAMWE   = r4 ; ctrl port RAM WE
+	.DEF	ZERO    = r5	; =0
+	.DEF	VIDEORAM= r6 ; =0xf8
+
+	.DEF	_sreg   = r7  ; Storing SREG in (HL) commands
+;	.DEF	zzA=r8
+	.DEF	zzA=r17
+
+	.DEF	ONE=r9				; =1
+
+	.DEF	zzF=r20
+	.DEF	zzB=r10
+;	.DEF	zzC=r11
+;	.DEF	zzC=r18
+	.DEF	zzC=r22
+	.DEF	zzD=r12
+	.DEF	zzE=r13
+	.DEF	zzH=r14
+	.DEF	zzL=r15
+	.DEF	zzIXl=r16
+;	.DEF	zzIXh=r17
+	.DEF	zzIXh=r8
+;	.DEF	zzIYl=r18
+	.DEF	zzIYl=r11
+	.DEF	zzIYh=r19
+
+	.DEF	zzTmp   =r21
+	.DEF	FROMRAM0=r23
+	.DEF	FROMRAM1=r1
+;	.DEF	FROMRAM2=r22
+	.DEF	FROMRAM2=r18
+
+	.DEF	zzPCl = r24           		;Rd
+	.DEF	zzPCh = r25            		;Rd
+
+;	.DEF	LSTART=r26			;X
+;	.DEF	LSTARTh=r27             	;X
+	.DEF	zzSPl = r28             	;Y
+	.DEF	zzSPh = r29             	;Y
+;	.DEF	JMPPTR = r30             	;Z
+;	.DEF	JMPPTRh = r31             	;Z
+
+	.DEF	temp	  = r21			; === zzTmp
